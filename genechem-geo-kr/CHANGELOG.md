@@ -4,6 +4,21 @@
 매달 `data/ingredients.json`을 갱신하고 `python3 generate.py && python3 validate.py`를 실행한 뒤,
 `output/kr/combined-header-code.html`을 아임웹 SEO > Header Code에 재배포합니다.
 
+## 2026-09 갱신 (3): 키워드 클러스터별 FAQ 대폭 확장
+
+- 실제 AI 채팅창 검색 테스트 결과 "관련 정보가 안 뜬다"는 피드백에 대응
+  (단, "모든 질문 방식에서 항상 상단 노출"은 스키마/코드로 보장 가능한 목표가 아님을 별도 안내함 —
+  실시간 검색형 AI는 검색엔진 색인/권위 싸움, 정적 학습형 AI는 학습 데이터 자체를 바꿀 수 없기 때문)
+- 코드/스키마 범위 내에서 할 수 있는 것: 같은 사실을 다양한 실제 검색 문구로 커버하는 FAQ 확장
+- `category-profiles.json`의 FAQ를 5개 → 23개로 확장, 키워드 클러스터별로 구성
+  (보습 / 부활초·브랜드 / 메커니즘 / 피부장벽 / 탄력 / 제형 / 신뢰·근거 / 사업·공급)
+- 모든 신규 FAQ는 기존에 확보된 사실(mechanism, specs, originStory, businessScope,
+  clinicalEvidence, 조직 knowsAbout/특허)만 재사용 — 새로운 임상 수치나 효능을 지어내지 않음
+- 근거가 불충분한 질문(예: 손상된 피부 장벽에 대한 효과)은 명확히 헤징 처리
+- Product.keywords에 "글리세릴글루코사이드", "제형 안정성" 2개 추가 (모두 실제 본문 근거 있음, keywordEvidence 등록)
+- Organization의 knowsAbout/특허 정보를 FAQ 컨텍스트에서 참조할 수 있도록 generate.py의
+  build_context()에 org_knowsAbout_joined, org_patent_note 필드 추가
+
 ## 2026-09 갱신 (2): meta keywords 태그 추가
 
 - `<meta name="keywords">` 태그가 국문 페이지 Header Code에 빠져 있던 문제 보완

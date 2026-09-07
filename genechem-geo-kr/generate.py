@@ -65,6 +65,8 @@ def build_context(ingredient, org, profile):
     ctx["name"] = ingredient.get("name")
     ctx["org_name"] = org["name"]
     ctx["org_url"] = org["url"]
+    ctx["org_knowsAbout_joined"] = ", ".join(org.get("knowsAbout", []))
+    ctx["org_patent_note"] = org.get("patents", {}).get("note", "")
     return ctx
 
 
