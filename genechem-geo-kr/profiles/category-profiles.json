@@ -4,7 +4,9 @@
     "site": "https://genechem.imweb.me/",
     "scope": "국내 사업 가능 원료만 포함(AquaGG). 해외 전용 원료(3'-SL, 6'-SL)는 영문 사이트(genechem-geo-en) 전용이며, 완제품 브랜드(다나겔 등)는 별도 브랜드로 이 시스템 범위에서 제외한다.",
     "lastUpdated": "2026-09",
-    "orgRequiredKnowsAbout": ["Enzyme Engineering", "Glycosylation"]
+    "orgRequiredKnowsAbout": ["Enzyme Engineering", "Glycosylation"],
+    "siteMetaDescription": "진켐 AquaGG는 아쿠아포린-3(AQP3)를 특이적으로 활성화해 깊고 지속적인 보습, 피부 장벽 강화, 탄력 개선을 제공하는 고순도(90% 이상) 화장품 기능성 원료입니다.",
+    "metaDescriptionMaxLength": 155
   },
   "categories": {
     "C": {

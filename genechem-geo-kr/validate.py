@@ -11,6 +11,8 @@ data/ingredients.json 이 profiles/category-profiles.json 의 요구사항을 �
      (keywordEvidence에 정의된 근거 문구가 본문에 실제로 등장하는지 확인)
   5. output/kr/*.html 안의 JSON-LD가 파싱 가능한 유효 JSON인지
   6. <meta name="keywords"> 태그가 존재하고 Product.keywords와 정확히 일치하는지(누락/임의추가 없는지)
+  7. <meta name="description"> 태그가 존재하고 profiles.meta.siteMetaDescription과 일치하는지,
+     길이가 검색결과 스니펫에 적합한지(기본 155자 이내)
 
 사용법:
     python3 validate.py
@@ -151,6 +153,43 @@ def validate_output_files(errors):
                 errors.append(f"[output] {f.name}: 노드에 '@type' 필드가 없습니다.")
 
 
+def check_meta_description(profiles, errors, warnings):
+    """<meta name="description">가 존재하고, profiles.meta.siteMetaDescription과 일치하며
+    검색결과 스니펫에 적합한 길이(기본 155자 이내)인지 확인한다."""
+    meta = profiles.get("meta", {})
+    expected = meta.get("siteMetaDescription", "")
+    max_len = meta.get("metaDescriptionMaxLength", 155)
+
+    if not expected:
+        errors.append(
+            "[profile] profiles.meta.siteMetaDescription 이 비어 있습니다. "
+            "검색결과 스니펫에 쓰일 메타 디스크립션 문구를 채워주세요."
+        )
+        return
+    if len(expected) > max_len:
+        warnings.append(
+            f"[profile] siteMetaDescription이 {len(expected)}자로 권장 길이({max_len}자)를 초과합니다. "
+            f"검색결과에서 잘려서 노출될 수 있습니다."
+        )
+
+    for fname in ("meta-tags.html", "combined-header-code.html"):
+        f = OUTPUT_DIR / fname
+        if not f.exists():
+            errors.append(f"[output] {fname} 가 없습니다. generate.py를 먼저 실행하세요.")
+            continue
+        text = f.read_text(encoding="utf-8")
+        m = re.search(r'<meta\s+name="description"\s+content="([^"]*)"', text)
+        if not m:
+            errors.append(f"[output] {fname} 에 <meta name=\"description\"> 태그가 없습니다.")
+            continue
+        actual = html.unescape(m.group(1))
+        if actual != expected:
+            errors.append(
+                f"[output] {fname} 의 meta description이 profiles.meta.siteMetaDescription과 다릅니다.\n"
+                f"         -> generate.py를 다시 실행해서 재생성하세요."
+            )
+
+
 def expected_meta_keywords(ingredients):
     seen = []
     for ingredient in ingredients:
@@ -209,6 +248,7 @@ def main():
 
     validate_output_files(errors)
     check_meta_keywords(ingredients, errors)
+    check_meta_description(profiles, errors, warnings)
 
     print("=" * 70)
     print(f"검증 결과: 오류 {len(errors)}건 / 경고 {len(warnings)}건")

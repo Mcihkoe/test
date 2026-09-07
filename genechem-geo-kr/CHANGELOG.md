@@ -4,6 +4,13 @@
 매달 `data/ingredients.json`을 갱신하고 `python3 generate.py && python3 validate.py`를 실행한 뒤,
 `output/kr/combined-header-code.html`을 아임웹 SEO > Header Code에 재배포합니다.
 
+## 2026-09 갱신 (4): meta description 태그 추가
+
+- 실제 사이트에 `<meta name="description">`도 비어 있던 것을 확인 → 추가
+- `profiles/category-profiles.json`의 `meta.siteMetaDescription`에 검색결과 스니펫용 문구(97자, 155자 권장 길이 이내)를 직접 관리
+- `generate.py`가 이 문구를 `output/kr/meta-tags.html`, `combined-header-code.html` 상단(description → keywords 순)에 자동 삽입
+- `validate.py`에 meta description 존재 여부, 길이(155자 초과 시 경고), 실제 출력물과의 일치 여부 검증 추가
+
 ## 2026-09 갱신 (3): 키워드 클러스터별 FAQ 대폭 확장
 
 - 실제 AI 채팅창 검색 테스트 결과 "관련 정보가 안 뜬다"는 피드백에 대응

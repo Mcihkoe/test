@@ -123,6 +123,16 @@ def build_meta_keywords_tag(ingredients):
     return f'<meta name="keywords" content="{content}">\n'
 
 
+def build_meta_description_tag(profiles):
+    """profiles.meta.siteMetaDescription을 그대로 <meta name="description">에 반영한다.
+    이 문구는 검색결과 스니펫에 노출되므로 profiles/category-profiles.json에서 직접 관리한다."""
+    description = profiles.get("meta", {}).get("siteMetaDescription", "")
+    if not description:
+        return ""
+    content = html.escape(description, quote=True)
+    return f'<meta name="description" content="{content}">\n'
+
+
 def main():
     data = load_json(DATA_FILE)
     profiles = load_json(PROFILE_FILE)
@@ -179,16 +189,18 @@ def main():
         generated.append(ingredient["id"])
 
     meta_keywords_tag = build_meta_keywords_tag(ingredients)
-    (OUTPUT_DIR / "meta-tags.html").write_text(meta_keywords_tag, encoding="utf-8")
+    meta_description_tag = build_meta_description_tag(profiles)
+    meta_tags = meta_description_tag + meta_keywords_tag
+    (OUTPUT_DIR / "meta-tags.html").write_text(meta_tags, encoding="utf-8")
 
     combined = {"@context": "https://schema.org", "@graph": graph}
     (OUTPUT_DIR / "combined-header-code.html").write_text(
-        meta_keywords_tag + wrap_script(combined), encoding="utf-8"
+        meta_tags + wrap_script(combined), encoding="utf-8"
     )
 
     print(f"[generate] {len(generated)}개 원료({', '.join(generated)}) JSON-LD 생성 완료 -> {OUTPUT_DIR}")
-    print("[generate] meta keywords는 Product.keywords와 동일한 값으로 자동 생성됩니다 (임의 추가 없음).")
-    print("[generate] combined-header-code.html 에 meta keywords + Organization + 전체 원료 Product/FAQ(@graph)가 합쳐져 있습니다.")
+    print("[generate] meta description은 profiles.meta.siteMetaDescription, meta keywords는 Product.keywords를 그대로 반영합니다.")
+    print("[generate] combined-header-code.html 에 meta description/keywords + Organization + 전체 원료 Product/FAQ(@graph)가 합쳐져 있습니다.")
     print("[generate] 아임웹 SEO > Header Code 필드에는 combined-header-code.html 내용을 그대로 붙여넣으면 됩니다.")
 
 
