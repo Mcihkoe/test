@@ -10,12 +10,15 @@ data/ingredients.json 이 profiles/category-profiles.json 의 요구사항을 �
   4. keywords 필드의 각 키워드가 본문(성분 설명)과 실제 관련이 있는지
      (keywordEvidence에 정의된 근거 문구가 본문에 실제로 등장하는지 확인)
   5. output/kr/*.html 안의 JSON-LD가 파싱 가능한 유효 JSON인지
+  6. <meta name="keywords"> 태그가 존재하고 Product.keywords와 정확히 일치하는지(누락/임의추가 없는지)
 
 사용법:
     python3 validate.py
 실패 시(오류 1건 이상) exit code 1 로 종료한다.
 """
+import html
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -130,6 +133,8 @@ def validate_output_files(errors):
         errors.append(f"[output] {OUTPUT_DIR} 에 생성된 .html 파일이 없습니다. generate.py를 먼저 실행하세요.")
         return
     for f in html_files:
+        if f.name == "meta-tags.html":
+            continue  # <meta> 전용 파일은 아래 check_meta_keywords()에서 별도 검증
         text = f.read_text(encoding="utf-8")
         if '<script type="application/ld+json">' not in text:
             errors.append(f"[output] {f.name}: <script type=\"application/ld+json\"> 태그가 없습니다.")
@@ -144,6 +149,40 @@ def validate_output_files(errors):
         for node in nodes:
             if "@type" not in node:
                 errors.append(f"[output] {f.name}: 노드에 '@type' 필드가 없습니다.")
+
+
+def expected_meta_keywords(ingredients):
+    seen = []
+    for ingredient in ingredients:
+        for kw in ingredient.get("keywords", []):
+            if kw not in seen:
+                seen.append(kw)
+    return seen
+
+
+def check_meta_keywords(ingredients, errors):
+    """<meta name="keywords">가 존재하고, Product.keywords와 정확히 일치하는지(임의 추가/누락 없는지) 확인한다."""
+    expected = expected_meta_keywords(ingredients)
+    expected_content = ", ".join(expected)
+
+    for fname in ("meta-tags.html", "combined-header-code.html"):
+        f = OUTPUT_DIR / fname
+        if not f.exists():
+            errors.append(f"[output] {fname} 가 없습니다. generate.py를 먼저 실행하세요.")
+            continue
+        text = f.read_text(encoding="utf-8")
+        m = re.search(r'<meta\s+name="keywords"\s+content="([^"]*)"', text)
+        if not m:
+            errors.append(f"[output] {fname} 에 <meta name=\"keywords\"> 태그가 없습니다.")
+            continue
+        actual_content = html.unescape(m.group(1))
+        if actual_content != expected_content:
+            errors.append(
+                f"[output] {fname} 의 meta keywords가 data/ingredients.json의 keywords와 다릅니다.\n"
+                f"         기대값: {expected_content}\n"
+                f"         실제값: {actual_content}\n"
+                f"         -> generate.py를 다시 실행해서 재생성하세요."
+            )
 
 
 def main():
@@ -169,6 +208,7 @@ def main():
         check_evidence_phrasing(ingredient, profile, errors)
 
     validate_output_files(errors)
+    check_meta_keywords(ingredients, errors)
 
     print("=" * 70)
     print(f"검증 결과: 오류 {len(errors)}건 / 경고 {len(warnings)}건")

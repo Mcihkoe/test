@@ -4,6 +4,12 @@
 매달 `data/ingredients.json`을 갱신하고 `python3 generate.py && python3 validate.py`를 실행한 뒤,
 `output/kr/combined-header-code.html`을 아임웹 SEO > Header Code에 재배포합니다.
 
+## 2026-09 갱신 (2): meta keywords 태그 추가
+
+- `<meta name="keywords">` 태그가 국문 페이지 Header Code에 빠져 있던 문제 보완
+- `generate.py`가 Product.keywords(이미 관련성 검증을 마친 9개 키워드)를 그대로 재사용해 `output/kr/meta-tags.html`과 `combined-header-code.html` 상단에 자동 삽입
+- `validate.py`에 meta keywords ↔ ingredients.json keywords 일치 여부 검증 추가 (임의 추가/누락 방지)
+
 ## 2026-09 갱신: AquaGG 초안 데이터 반영
 
 - 폴더 구조 및 생성/검증 파이프라인 최초 구축 (`data/`, `profiles/`, `templates/`, `generate.py`, `validate.py`)

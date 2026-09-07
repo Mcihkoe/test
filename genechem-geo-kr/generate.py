@@ -9,6 +9,7 @@ output/kr/ 아래에 <script type="application/ld+json"> 로 감싼 .html 파일
 
 ingredients.json만 수정하고 이 스크립트를 다시 실행하면 output/kr/ 전체가 재생성된다.
 """
+import html
 import json
 import re
 from pathlib import Path
@@ -108,6 +109,18 @@ def strip_context(node):
     return {k: v for k, v in node.items() if k != "@context"}
 
 
+def build_meta_keywords_tag(ingredients):
+    """이미 Product 스키마 keywords에 등록되고 validate.py로 관련성 검증을 마친 키워드만 그대로
+    <meta name="keywords">에 반영한다. 새로운 단어를 여기서 추가하지 않는다(키워드 스터핑 방지)."""
+    seen = []
+    for ingredient in ingredients:
+        for kw in ingredient.get("keywords", []):
+            if kw not in seen:
+                seen.append(kw)
+    content = html.escape(", ".join(seen), quote=True)
+    return f'<meta name="keywords" content="{content}">\n'
+
+
 def main():
     data = load_json(DATA_FILE)
     profiles = load_json(PROFILE_FILE)
@@ -163,11 +176,17 @@ def main():
         graph.append(strip_context(faq_jsonld))
         generated.append(ingredient["id"])
 
+    meta_keywords_tag = build_meta_keywords_tag(ingredients)
+    (OUTPUT_DIR / "meta-tags.html").write_text(meta_keywords_tag, encoding="utf-8")
+
     combined = {"@context": "https://schema.org", "@graph": graph}
-    (OUTPUT_DIR / "combined-header-code.html").write_text(wrap_script(combined), encoding="utf-8")
+    (OUTPUT_DIR / "combined-header-code.html").write_text(
+        meta_keywords_tag + wrap_script(combined), encoding="utf-8"
+    )
 
     print(f"[generate] {len(generated)}개 원료({', '.join(generated)}) JSON-LD 생성 완료 -> {OUTPUT_DIR}")
-    print("[generate] combined-header-code.html 에 Organization + 전체 원료 Product/FAQ가 하나의 @graph로 합쳐져 있습니다.")
+    print("[generate] meta keywords는 Product.keywords와 동일한 값으로 자동 생성됩니다 (임의 추가 없음).")
+    print("[generate] combined-header-code.html 에 meta keywords + Organization + 전체 원료 Product/FAQ(@graph)가 합쳐져 있습니다.")
     print("[generate] 아임웹 SEO > Header Code 필드에는 combined-header-code.html 내용을 그대로 붙여넣으면 됩니다.")
 
 
