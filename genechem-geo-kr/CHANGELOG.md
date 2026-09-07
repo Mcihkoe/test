@@ -4,6 +4,22 @@
 매달 `data/ingredients.json`을 갱신하고 `python3 generate.py && python3 validate.py`를 실행한 뒤,
 `output/kr/combined-header-code.html`을 아임웹 SEO > Header Code에 재배포합니다.
 
+## 2026-09 갱신 (5): 사이트 전체 meta description을 회사 소개로 정정, 원료별 페이지 전용 description 분리
+
+- 문제: 사이트 전체 Header Code(모든 페이지의 <head>에 삽입됨)에 "AquaGG는 ~" 식 제품 한정 설명을 넣었던 것은
+  오류였음 — 진켐은 AquaGG만 있는 회사가 아니고(3'-SL/6'-SL은 영문 사이트 전용), 홈/회사소개 등
+  다른 페이지에도 이 설명이 그대로 노출되어 실제 페이지 내용과 어긋남
+- 판단 기준: Google은 페이지 내용과 어긋나는 meta description을 무시/재생성하며, meta description은
+  랭킹 신호가 아니라 스니펫/CTR에만 영향을 준다 — 즉 "회사 전체" 쿼리에는 회사 소개가, "AquaGG" 쿼리에는
+  제품 소개가 매칭되어야 함
+- `profiles/category-profiles.json`:
+  - `meta.siteMetaDescription` → 회사(진켐/GeneChem) 소개 문구로 교체 (87자)
+  - `meta.productPageMetaDescriptions.aquagg` 신설 → 기존 제품 설명 문구를 여기로 이동
+- `generate.py`가 원료별로 `{id}-meta-description.html`을 별도 생성 — 이건 Header Code가 아니라
+  아임웹의 "페이지별 SEO 설정"(AquaGG 페이지 자체)에 직접 붙여넣는 용도
+- `validate.py`에 (1) siteMetaDescription이 회사명을 포함하는지, (2) 원료별 페이지 설명이 각각
+  정의되어 있는지 검증 추가
+
 ## 2026-09 갱신 (4): meta description 태그 추가
 
 - 실제 사이트에 `<meta name="description">`도 비어 있던 것을 확인 → 추가

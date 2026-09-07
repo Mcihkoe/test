@@ -11,8 +11,9 @@ data/ingredients.json 이 profiles/category-profiles.json 의 요구사항을 �
      (keywordEvidence에 정의된 근거 문구가 본문에 실제로 등장하는지 확인)
   5. output/kr/*.html 안의 JSON-LD가 파싱 가능한 유효 JSON인지
   6. <meta name="keywords"> 태그가 존재하고 Product.keywords와 정확히 일치하는지(누락/임의추가 없는지)
-  7. <meta name="description"> 태그가 존재하고 profiles.meta.siteMetaDescription과 일치하는지,
-     길이가 검색결과 스니펫에 적합한지(기본 155자 이내)
+  7. 사이트 전체 <meta name="description">(회사 소개)가 존재하고 siteMetaDescription과 일치하는지,
+     길이가 적절한지(기본 155자 이내), 회사명을 포함하는지(특정 원료로 한정되지 않았는지)
+  8. 원료별 페이지 전용 메타 디스크립션(productPageMetaDescriptions)이 각 원료마다 정의되어 있는지
 
 사용법:
     python3 validate.py
@@ -135,8 +136,8 @@ def validate_output_files(errors):
         errors.append(f"[output] {OUTPUT_DIR} 에 생성된 .html 파일이 없습니다. generate.py를 먼저 실행하세요.")
         return
     for f in html_files:
-        if f.name == "meta-tags.html":
-            continue  # <meta> 전용 파일은 아래 check_meta_keywords()에서 별도 검증
+        if f.name == "meta-tags.html" or f.name.endswith("-meta-description.html"):
+            continue  # <meta> 전용 파일은 check_meta_keywords()/check_page_meta_descriptions()에서 별도 검증
         text = f.read_text(encoding="utf-8")
         if '<script type="application/ld+json">' not in text:
             errors.append(f"[output] {f.name}: <script type=\"application/ld+json\"> 태그가 없습니다.")
@@ -153,9 +154,11 @@ def validate_output_files(errors):
                 errors.append(f"[output] {f.name}: 노드에 '@type' 필드가 없습니다.")
 
 
-def check_meta_description(profiles, errors, warnings):
+def check_meta_description(org, profiles, errors, warnings):
     """<meta name="description">가 존재하고, profiles.meta.siteMetaDescription과 일치하며
-    검색결과 스니펫에 적합한 길이(기본 155자 이내)인지 확인한다."""
+    검색결과 스니펫에 적합한 길이(기본 155자 이내)인지 확인한다.
+    이 태그는 아임웹 Header Code(사이트 전체 <head>)에 삽입되므로, 특정 원료 하나로 한정된
+    설명이 아니라 회사 전체를 대표하는 문구인지도 함께 점검한다."""
     meta = profiles.get("meta", {})
     expected = meta.get("siteMetaDescription", "")
     max_len = meta.get("metaDescriptionMaxLength", 155)
@@ -170,6 +173,16 @@ def check_meta_description(profiles, errors, warnings):
         warnings.append(
             f"[profile] siteMetaDescription이 {len(expected)}자로 권장 길이({max_len}자)를 초과합니다. "
             f"검색결과에서 잘려서 노출될 수 있습니다."
+        )
+    def core_name(n):
+        return n.replace("(주)", "").replace("주식회사", "").replace(" Inc.", "").replace(" Inc", "").strip()
+
+    org_names = [core_name(n) for n in (org.get("name"), org.get("alternateName")) if n]
+    if org_names and not any(n in expected for n in org_names):
+        warnings.append(
+            "[profile] siteMetaDescription에 회사명이 포함되어 있지 않습니다. "
+            "이 태그는 사이트 전체(홈, 회사소개 등)에 적용되므로 특정 원료명이 아니라 "
+            "회사명을 주어로 하는 문장인지 다시 확인하세요."
         )
 
     for fname in ("meta-tags.html", "combined-header-code.html"):
@@ -187,6 +200,39 @@ def check_meta_description(profiles, errors, warnings):
             errors.append(
                 f"[output] {fname} 의 meta description이 profiles.meta.siteMetaDescription과 다릅니다.\n"
                 f"         -> generate.py를 다시 실행해서 재생성하세요."
+            )
+
+
+def check_page_meta_descriptions(ingredients, profiles, errors, warnings):
+    """원료별 페이지 전용 메타 디스크립션(productPageMetaDescriptions)이 각 원료마다 정의되어 있고,
+    길이가 적절하며, 대응하는 {id}-meta-description.html 파일이 실제로 생성되어 있는지 확인한다."""
+    meta = profiles.get("meta", {})
+    max_len = meta.get("metaDescriptionMaxLength", 155)
+    page_descriptions = meta.get("productPageMetaDescriptions", {})
+
+    for ingredient in ingredients:
+        ing_id = ingredient["id"]
+        expected = page_descriptions.get(ing_id, "")
+        if not expected:
+            warnings.append(
+                f"[{ing_id}] profiles.meta.productPageMetaDescriptions 에 이 원료의 페이지 전용 "
+                f"메타 디스크립션이 없습니다. 이 원료 페이지는 사이트 전체 회사 소개 문구만 노출됩니다."
+            )
+            continue
+        if len(expected) > max_len:
+            warnings.append(
+                f"[{ing_id}] 페이지 전용 메타 디스크립션이 {len(expected)}자로 권장 길이({max_len}자)를 초과합니다."
+            )
+        f = OUTPUT_DIR / f"{ing_id}-meta-description.html"
+        if not f.exists():
+            errors.append(f"[output] {ing_id}-meta-description.html 이 없습니다. generate.py를 먼저 실행하세요.")
+            continue
+        text = f.read_text(encoding="utf-8")
+        m = re.search(r'<meta\s+name="description"\s+content="([^"]*)"', text)
+        if not m or html.unescape(m.group(1)) != expected:
+            errors.append(
+                f"[output] {ing_id}-meta-description.html 의 내용이 profiles.meta.productPageMetaDescriptions"
+                f"['{ing_id}']와 다릅니다. generate.py를 다시 실행하세요."
             )
 
 
@@ -248,7 +294,8 @@ def main():
 
     validate_output_files(errors)
     check_meta_keywords(ingredients, errors)
-    check_meta_description(profiles, errors, warnings)
+    check_meta_description(org, profiles, errors, warnings)
+    check_page_meta_descriptions(ingredients, profiles, errors, warnings)
 
     print("=" * 70)
     print(f"검증 결과: 오류 {len(errors)}건 / 경고 {len(warnings)}건")

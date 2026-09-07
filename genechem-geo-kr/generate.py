@@ -133,6 +133,16 @@ def build_meta_description_tag(profiles):
     return f'<meta name="description" content="{content}">\n'
 
 
+def build_page_meta_description_tag(ingredient_id, profiles):
+    """profiles.meta.productPageMetaDescriptions[id]를 페이지 전용 메타 디스크립션으로 반환한다.
+    이건 사이트 전체 Header Code가 아니라, 아임웹의 '페이지별 SEO 설정'에 직접 붙여넣는 용도다."""
+    description = profiles.get("meta", {}).get("productPageMetaDescriptions", {}).get(ingredient_id, "")
+    if not description:
+        return None
+    content = html.escape(description, quote=True)
+    return f'<meta name="description" content="{content}">\n'
+
+
 def main():
     data = load_json(DATA_FILE)
     profiles = load_json(PROFILE_FILE)
@@ -184,6 +194,10 @@ def main():
         faq_jsonld = substitute(faq_template, {"faqItems": faq_items})
         (OUTPUT_DIR / f"{ingredient['id']}-faq.html").write_text(wrap_script(faq_jsonld), encoding="utf-8")
 
+        page_meta_tag = build_page_meta_description_tag(ingredient["id"], profiles)
+        if page_meta_tag:
+            (OUTPUT_DIR / f"{ingredient['id']}-meta-description.html").write_text(page_meta_tag, encoding="utf-8")
+
         graph.append(strip_context(product_jsonld))
         graph.append(strip_context(faq_jsonld))
         generated.append(ingredient["id"])
@@ -199,8 +213,8 @@ def main():
     )
 
     print(f"[generate] {len(generated)}개 원료({', '.join(generated)}) JSON-LD 생성 완료 -> {OUTPUT_DIR}")
-    print("[generate] meta description은 profiles.meta.siteMetaDescription, meta keywords는 Product.keywords를 그대로 반영합니다.")
-    print("[generate] combined-header-code.html 에 meta description/keywords + Organization + 전체 원료 Product/FAQ(@graph)가 합쳐져 있습니다.")
+    print("[generate] combined-header-code.html 의 meta description은 회사 소개(siteMetaDescription)입니다 — 사이트 전체 <head>에 삽입되는 값이므로 특정 원료로 한정하지 않습니다.")
+    print("[generate] {id}-meta-description.html 은 해당 원료 페이지 전용 메타 디스크립션입니다 — Header Code가 아니라 아임웹의 '페이지별 SEO 설정'에 직접 붙여넣으세요.")
     print("[generate] 아임웹 SEO > Header Code 필드에는 combined-header-code.html 내용을 그대로 붙여넣으면 됩니다.")
 
 
