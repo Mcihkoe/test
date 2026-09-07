@@ -1,0 +1,266 @@
+{
+  "meta": {
+    "market": "EN",
+    "site": "https://genechem.co.kr/",
+    "scope": "Covers all three B2B ingredient lines: 3'-SL and 6'-SL (overseas/export only) and AquaGG (domestic + international). Finished consumer products (e.g. Danagel) are a separate brand and out of scope for this system.",
+    "lastUpdated": "2026-09",
+    "orgRequiredKnowsAbout": ["Enzyme Engineering", "Glycosylation"]
+  },
+  "categories": {
+    "A": {
+      "id": "A",
+      "label": "3'-Sialyllactose (3'-SL) — B2B ingredient, export/overseas only",
+      "audienceType": "Supplement and food manufacturers (B2B)",
+      "schemaTypes": ["Product", "FAQPage"],
+
+      "requiredFields": ["ingredient", "efficacyClaim", "targetUse", "businessScope", "patentStatus", "clinicalEvidence"],
+      "fieldPaths": {
+        "ingredient": "name",
+        "efficacyClaim": "efficacyClaim.claims",
+        "targetUse": "targetUse",
+        "businessScope": "businessScope",
+        "patentStatus": "patentStatus.note",
+        "clinicalEvidence": "clinicalEvidence.summary"
+      },
+
+      "contextMap": {
+        "efficacyClaims": "efficacyClaim.claims|join(, )",
+        "mechanismBasis": "mechanismBasis",
+        "clinicalSummary": "clinicalEvidence.summary",
+        "clinicalDetails": "clinicalEvidence.details",
+        "businessScope": "businessScope",
+        "targetUse": "targetUse",
+        "patentNote": "patentStatus.note"
+      },
+
+      "additionalPropertyFields": [
+        {"path": "efficacyClaim.claims", "label": "Potential Efficacy (mechanism-based, not clinically proven)"},
+        {"path": "targetUse", "label": "Target Use"},
+        {"path": "businessScope", "label": "Business Scope"},
+        {"path": "patentStatus.note", "label": "Patent Status"},
+        {"path": "clinicalEvidence.summary", "label": "Clinical Evidence"}
+      ],
+
+      "descriptionTemplate": "3'-Sialyllactose (3'-SL) is a human milk oligosaccharide (HMO)-derived functional ingredient supplied by GeneChem for B2B use in supplement and food formulations. {mechanismBasis}",
+
+      "faqPatterns": [
+        {
+          "id": "what-is-3sl",
+          "question": "What is 3'-Sialyllactose (3'-SL) and how is it produced?",
+          "answerTemplate": "3'-Sialyllactose (3'-SL) is a human milk oligosaccharide (HMO)-derived functional ingredient produced by GeneChem via a proprietary enzymatic process, and supplied as {targetUse}."
+        },
+        {
+          "id": "gut-health",
+          "question": "How might 3'-SL support gut health and the gut mucosal barrier?",
+          "answerTemplate": "{mechanismBasis}"
+        },
+        {
+          "id": "joint-relevance",
+          "question": "Does 3'-SL have any potential relevance to joint health?",
+          "answerTemplate": "Based on the mechanism of HMOs, 3'-SL is being explored for its potential relevance to joint nutrition, in addition to its exploratory role in supporting the gut mucosal barrier, modulating the gut microbiome, and reducing inflammation. This is a mechanism-based, exploratory statement and not a proven clinical claim."
+        },
+        {
+          "id": "clinical-data",
+          "question": "Is there clinical trial data available for 3'-SL?",
+          "answerTemplate": "{clinicalSummary} {clinicalDetails}"
+        },
+        {
+          "id": "market-availability",
+          "question": "Is 3'-SL available for the domestic Korean market or export only?",
+          "answerTemplate": "{name} is {businessScope}. It is supplied as {targetUse}. {patentNote}"
+        }
+      ],
+
+      "evidencePhrasingRules": {
+        "forbiddenPhrases": ["clinically proven", "proven to", "clinical trial demonstrates", "scientifically proven effective", "cures", "guaranteed"],
+        "requiredPhrasesAny": ["mechanism-based", "based on the mechanism", "exploring the potential", "structural rationale"]
+      }
+    },
+
+    "B": {
+      "id": "B",
+      "label": "6'-Sialyllactose (6'-SL) — B2B ingredient, export/overseas only",
+      "audienceType": "Supplement and sports nutrition manufacturers (B2B)",
+      "schemaTypes": ["Product", "FAQPage"],
+
+      "requiredFields": ["ingredient", "efficacyClaim", "targetUse", "businessScope", "patentStatus", "clinicalEvidence"],
+      "fieldPaths": {
+        "ingredient": "name",
+        "efficacyClaim": "efficacyClaim.claims",
+        "targetUse": "targetUse",
+        "businessScope": "businessScope",
+        "patentStatus": "patentStatus.note",
+        "clinicalEvidence": "clinicalEvidence.summary"
+      },
+
+      "contextMap": {
+        "efficacyClaims": "efficacyClaim.claims|join(, )",
+        "clinicalSummary": "clinicalEvidence.summary",
+        "gnePopulation": "clinicalEvidence.studies.0.population",
+        "gneDesign": "clinicalEvidence.studies.0.design",
+        "gneResults": "clinicalEvidence.studies.0.results",
+        "gneDisclaimer": "clinicalEvidence.studies.0.disclaimer",
+        "postechResults": "clinicalEvidence.studies.1.results",
+        "postechPublication": "clinicalEvidence.studies.1.publication",
+        "businessScope": "businessScope",
+        "targetUse": "targetUse",
+        "patentNote": "patentStatus.note"
+      },
+
+      "additionalPropertyFields": [
+        {"path": "efficacyClaim.claims", "label": "Efficacy"},
+        {"path": "targetUse", "label": "Target Use"},
+        {"path": "businessScope", "label": "Business Scope"},
+        {"path": "patentStatus.note", "label": "Patent Status"},
+        {"path": "clinicalEvidence.summary", "label": "Clinical Evidence"}
+      ],
+
+      "descriptionTemplate": "6'-Sialyllactose (6'-SL) is a human milk oligosaccharide (HMO)-derived functional ingredient supplied by GeneChem for B2B use in supplement and sports nutrition formulations, supporting muscle growth, muscle recovery, and strength. {clinicalSummary}",
+
+      "faqPatterns": [
+        {
+          "id": "what-is-6sl",
+          "question": "What is 6'-Sialyllactose (6'-SL) and what is it used for?",
+          "answerTemplate": "6'-Sialyllactose (6'-SL) is a human milk oligosaccharide (HMO)-derived functional ingredient produced by GeneChem via a proprietary enzymatic process. It is supplied as {targetUse}, supporting muscle growth, muscle recovery, and strength."
+        },
+        {
+          "id": "clinical-evidence",
+          "question": "What clinical evidence supports 6'-SL for muscle growth and recovery?",
+          "answerTemplate": "{clinicalSummary}"
+        },
+        {
+          "id": "gne-myopathy-trial",
+          "question": "What were the results of the GNE myopathy pilot trial with 6'-SL?",
+          "answerTemplate": "In a pilot clinical trial in {gnePopulation}, participants underwent a {gneDesign}. {gneResults} {gneDisclaimer}"
+        },
+        {
+          "id": "postech-study",
+          "question": "What did the POSTECH study find about 6'-SL and exercise performance?",
+          "answerTemplate": "In a collaborative study with Pohang University of Science and Technology (POSTECH), 6'-SL {postechResults} This study was {postechPublication}"
+        },
+        {
+          "id": "market-availability",
+          "question": "Is 6'-SL available for the domestic Korean market or export only?",
+          "answerTemplate": "{name} is {businessScope}. It is supplied as {targetUse}. {patentNote}"
+        }
+      ],
+
+      "evidencePhrasingRules": {
+        "forbiddenPhrases": ["guaranteed results", "cure", "clinically proven for general athletes", "proven to build muscle in all users"],
+        "requiredPhrasesAny": ["rare-disease", "rare genetic muscle disease", "should not be generalized"],
+        "requiredPhrasesAll": ["GNE myopathy", "POSTECH"]
+      }
+    },
+
+    "C": {
+      "id": "C",
+      "label": "AquaGG (cosmetic ingredient, B2B, domestic + international)",
+      "audienceType": "Cosmetic manufacturers and brands (B2B)",
+      "schemaTypes": ["Product", "FAQPage"],
+
+      "requiredFields": [
+        "inciName",
+        "mechanism",
+        "purity",
+        "formulationCompatibility",
+        "originStory",
+        "businessScope",
+        "clinicalEvidence",
+        "keywords"
+      ],
+      "fieldPaths": {
+        "inciName": "inciName",
+        "mechanism": "mechanism.action",
+        "purity": "specs.purity",
+        "formulationCompatibility": "specs.solubility",
+        "originStory": "originStory",
+        "businessScope": "businessScope",
+        "clinicalEvidence": "clinicalEvidence.summary",
+        "keywords": "keywords"
+      },
+
+      "contextMap": {
+        "inciName": "inciName",
+        "purity": "specs.purity",
+        "phStability": "specs.phStability",
+        "solubility": "specs.solubility",
+        "originStory": "originStory",
+        "mechanismTarget": "mechanism.target",
+        "mechanismAction": "mechanism.action",
+        "effectsJoined": "mechanism.effects|join(, )",
+        "clinicalSummary": "clinicalEvidence.summary",
+        "clinicalDetails": "clinicalEvidence.details",
+        "businessScope": "businessScope"
+      },
+
+      "additionalPropertyFields": [
+        {"path": "inciName", "label": "INCI Name"},
+        {"path": "mechanism.target", "label": "Mechanism Target"},
+        {"path": "mechanism.action", "label": "Mechanism of Action"},
+        {"path": "mechanism.effects", "label": "Key Effects"},
+        {"path": "specs.purity", "label": "Purity"},
+        {"path": "specs.solubility", "label": "Solubility"},
+        {"path": "specs.phStability", "label": "pH Stability"},
+        {"path": "originStory", "label": "Origin Story"},
+        {"path": "businessScope", "label": "Business Scope"},
+        {"path": "clinicalEvidence.summary", "label": "Clinical/Scientific Evidence"}
+      ],
+
+      "descriptionTemplate": "AquaGG ({inciName}) is a cosmetic functional ingredient produced by GeneChem via a proprietary enzymatic process. It {mechanismAction} {mechanismTarget}, delivering {effectsJoined}.",
+
+      "faqPatterns": [
+        {
+          "id": "how-it-works",
+          "question": "How does AquaGG provide deep, long-lasting hydration?",
+          "answerTemplate": "AquaGG {mechanismAction} {mechanismTarget}, delivering {effectsJoined}. Because it works by opening the skin's own water channels rather than simply forming a surface film, it provides deeper and longer-lasting hydration than many conventional moisturizing ingredients."
+        },
+        {
+          "id": "origin-story",
+          "question": "What is the Resurrection Plant origin story behind AquaGG?",
+          "answerTemplate": "AquaGG's origin story begins with the Resurrection Plant: it is {originStory} This survival mechanism inspired GeneChem to develop an ingredient that activates {mechanismTarget} to keep skin cells hydrated."
+        },
+        {
+          "id": "vs-conventional",
+          "question": "How does AquaGG's AQP3 activation mechanism differ from conventional moisturizing ingredients?",
+          "answerTemplate": "Conventional moisturizing ingredients, such as glycerin or hyaluronic acid, typically work by forming a surface film or drawing in external moisture. AquaGG instead {mechanismAction} {mechanismTarget}, opening the skin cells' own water transport channels to deliver {effectsJoined}."
+        },
+        {
+          "id": "specs",
+          "question": "What is AquaGG's purity and formulation stability (pH range)?",
+          "answerTemplate": "AquaGG is a high-purity ingredient with {purity} purity. It is {solubility} and remains stable across a {phStability} range, making it easy to formulate into a wide variety of cosmetic products."
+        },
+        {
+          "id": "evidence",
+          "question": "What scientific evidence supports AquaGG's hydration claims?",
+          "answerTemplate": "{clinicalSummary} {clinicalDetails}"
+        }
+      ],
+
+      "keywords": [
+        "moisturizing",
+        "deep hydration",
+        "skin hydration",
+        "water channel activation",
+        "AQP3",
+        "dewy skin",
+        "skin barrier support",
+        "elasticity"
+      ],
+      "keywordEvidence": {
+        "moisturizing": {"mustContainAny": ["moisture", "hydrat"]},
+        "deep hydration": {"mustContainAny": ["deep", "hydration"]},
+        "skin hydration": {"mustContainAny": ["skin", "hydration"]},
+        "water channel activation": {"mustContainAny": ["water channel", "water transport"]},
+        "AQP3": {"mustContainAny": ["AQP3"]},
+        "dewy skin": {"mustContainAny": ["dewy"]},
+        "skin barrier support": {"mustContainAny": ["skin barrier"]},
+        "elasticity": {"mustContainAny": ["elasticity"]}
+      },
+
+      "evidencePhrasingRules": {
+        "forbiddenPhrases": ["cures", "medical treatment", "clinically proven to cure", "guaranteed anti-aging"],
+        "requiredPhrasesAny": ["AQP3", "scientifically confirmed", "clinical"]
+      }
+    }
+  }
+}

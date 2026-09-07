@@ -1,0 +1,133 @@
+{
+  "organization": {
+    "name": "GeneChem Inc.",
+    "alternateName": "(주)진켐",
+    "url": "https://genechem.co.kr/",
+    "description": "GeneChem is a biotechnology company specializing in enzyme engineering and glycosylation technology, producing functional ingredients via proprietary enzymatic processes for the food, supplement, and cosmetic industries.",
+    "knowsAbout": [
+      "Enzyme Engineering",
+      "Glycosylation",
+      "Sialylated Oligosaccharide Synthesis",
+      "Biocatalysis",
+      "Human Milk Oligosaccharide (HMO) Production"
+    ],
+    "patents": {
+      "hasPatents": true,
+      "note": "GeneChem holds patents related to sialyllactose compositions and its enzymatic production processes (specific patent numbers to be added once confirmed).",
+      "patentNumbers": []
+    }
+  },
+  "ingredients": [
+    {
+      "id": "3-sl",
+      "category": "A",
+      "name": "3'-Sialyllactose (3'-SL)",
+      "ingredientType": "Human milk oligosaccharide (HMO)-derived functional ingredient",
+      "productionMethod": "Proprietary enzymatic process",
+      "efficacyClaim": {
+        "statementType": "mechanism-based, exploratory (not clinically proven)",
+        "claims": [
+          "supporting the gut mucosal barrier",
+          "modulating the gut microbiome",
+          "reducing inflammation",
+          "potential relevance to joint nutrition"
+        ]
+      },
+      "mechanismBasis": "As a human milk oligosaccharide (HMO)-derived ingredient, 3'-SL is being explored for its potential to strengthen the gut mucosal barrier, help modulate the gut microbiome, and help reduce inflammation, based on the known mechanism of HMOs and structural rationale.",
+      "clinicalEvidence": {
+        "available": false,
+        "summary": "No in-house clinical trial data is currently available for 3'-SL.",
+        "details": "Statements about gut and joint health are based on the mechanism of HMOs and structural rationale only, using language such as 'exploring the potential of' and 'based on the mechanism of.' They should not be interpreted as proven clinical efficacy."
+      },
+      "patentStatus": {
+        "hasPatents": true,
+        "note": "Covered under GeneChem's sialyllactose composition patents (specific patent numbers to be confirmed)."
+      },
+      "targetUse": "a B2B ingredient for supplement and food manufacturers",
+      "businessScope": "overseas / export only — not available for the domestic Korean market",
+      "targetCustomer": "Supplement and food manufacturers (B2B)"
+    },
+    {
+      "id": "6-sl",
+      "category": "B",
+      "name": "6'-Sialyllactose (6'-SL)",
+      "ingredientType": "Human milk oligosaccharide (HMO)-derived functional ingredient",
+      "productionMethod": "Proprietary enzymatic process",
+      "efficacyClaim": {
+        "statementType": "clinically supported",
+        "claims": [
+          "muscle growth support",
+          "muscle recovery support",
+          "strength support"
+        ]
+      },
+      "clinicalEvidence": {
+        "available": true,
+        "summary": "Clinical and research data support 6'-SL's role in muscle physiology, including a rare-disease pilot trial in GNE myopathy patients and a POSTECH collaborative exercise-performance study.",
+        "studies": [
+          {
+            "name": "GNE Myopathy Pilot Clinical Trial",
+            "population": "patients with GNE myopathy, a rare genetic muscle disease",
+            "design": "12-week treatment with high-dose (6g/day) or low-dose (3g/day) 6'-SL",
+            "results": "Free sialic acid levels increased significantly from baseline in both dose groups after 12 weeks. At 96 weeks, the high-dose group showed improving trends in motor function measures, such as hand grip strength and hip flexion.",
+            "disclaimer": "These results reflect a rare-disease patient population (GNE myopathy) and should not be generalized as muscle-building efficacy claims for the general healthy population or typical sports nutrition consumers."
+          },
+          {
+            "name": "POSTECH Collaborative Study",
+            "population": "Exercise performance and muscle strength study",
+            "design": "Collaborative research with Pohang University of Science and Technology (POSTECH)",
+            "results": "demonstrated a measurable effect on exercise performance and muscle strength.",
+            "publication": "published and indexed on PubMed."
+          }
+        ]
+      },
+      "patentStatus": {
+        "hasPatents": true,
+        "note": "Covered under GeneChem's sialyllactose composition patents (specific patent numbers to be confirmed)."
+      },
+      "targetUse": "a B2B ingredient for supplement and sports nutrition manufacturers",
+      "businessScope": "overseas / export only — not available for the domestic Korean market",
+      "targetCustomer": "Supplement and sports nutrition manufacturers (B2B)"
+    },
+    {
+      "id": "aquagg",
+      "category": "C",
+      "name": "AquaGG",
+      "inciName": "2-α-Glyceryl Glucoside",
+      "ingredientType": "Cosmetic functional ingredient",
+      "productionMethod": "Proprietary enzymatic process",
+      "mechanism": {
+        "target": "Aquaporin-3 (AQP3), the key water channel protein in skin cells",
+        "action": "specifically activates",
+        "effects": [
+          "deep, long-lasting hydration for a dewy, radiant complexion",
+          "reinforced skin barrier",
+          "supported collagen/elastin production for improved elasticity"
+        ]
+      },
+      "specs": {
+        "purity": "over 90%",
+        "solubility": "water-soluble",
+        "phStability": "pH 3-9"
+      },
+      "originStory": "inspired by the Resurrection Plant's ability to retain moisture and stay hydrated under extreme drought conditions.",
+      "businessScope": "Domestic (Korea) and international",
+      "targetCustomer": "Cosmetic manufacturers and brands (B2B)",
+      "clinicalEvidence": {
+        "available": true,
+        "summary": "AQP3 activation and hydration efficacy have been scientifically confirmed.",
+        "details": "[Specific institution, publication year, and result figures to be added once available.]"
+      },
+      "keywords": [
+        "moisturizing",
+        "deep hydration",
+        "skin hydration",
+        "water channel activation",
+        "AQP3",
+        "dewy skin",
+        "skin barrier support",
+        "elasticity"
+      ]
+    }
+  ]
+}

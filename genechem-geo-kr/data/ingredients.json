@@ -1,0 +1,64 @@
+{
+  "organization": {
+    "name": "(주)진켐",
+    "alternateName": "GeneChem Inc.",
+    "url": "https://genechem.imweb.me/",
+    "description": "효소 공정 기반 효소공학(Enzyme Engineering) 및 글리코실레이션(Glycosylation) 기술을 보유한 바이오 소재 기업으로, 자체 효소 공정을 통해 화장품 기능성 원료를 생산합니다.",
+    "knowsAbout": [
+      "Enzyme Engineering",
+      "Glycosylation",
+      "효소공학",
+      "글리코실레이션",
+      "Biocatalysis",
+      "화장품 기능성 원료 개발"
+    ],
+    "patents": {
+      "hasPatents": true,
+      "note": "자체 효소 공정 및 기능성 원료 관련 특허 보유 (구체 특허번호는 자료 확보 시 추가)",
+      "patentNumbers": []
+    }
+  },
+  "ingredients": [
+    {
+      "id": "aquagg",
+      "category": "C",
+      "name": "AquaGG",
+      "inciName": "2-α-글리세릴글루코사이드(2-α-Glyceryl Glucoside)",
+      "type": "화장품 기능성 원료",
+      "productionMethod": "자체 효소 공정",
+      "mechanism": {
+        "target": "아쿠아포린-3(AQP3, 피부 세포의 핵심 수분 채널 단백질)",
+        "action": "특이적으로 활성화",
+        "effects": [
+          "깊고 지속적인 수분 공급(보습)",
+          "피부 장벽 강화",
+          "콜라겐/엘라스틴 생성 지원(탄력 개선)"
+        ]
+      },
+      "specs": {
+        "purity": "90% 이상",
+        "solubility": "수용성",
+        "phStability": "pH 3~9"
+      },
+      "originStory": "극심한 가뭄에도 수분을 유지하며 촉촉함을 잃지 않는 '부활초(Resurrection Plant)'의 생존 원리에서 착안한 성분입니다.",
+      "businessScope": "국내",
+      "targetCustomer": "화장품 제조사/브랜드 (B2B)",
+      "clinicalEvidence": {
+        "available": true,
+        "summary": "AQP3 활성화 및 보습 효과가 과학적으로 검증됨",
+        "details": "[세부 연구 기관, 발표 연도, 구체 수치는 자료 확보 시 추가]"
+      },
+      "keywords": [
+        "보습",
+        "고보습",
+        "피부 수분",
+        "수분 채널",
+        "촉촉한 피부",
+        "아쿠아포린 활성화",
+        "AQP3",
+        "피부 장벽 강화",
+        "탄력"
+      ]
+    }
+  ]
+}

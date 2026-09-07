@@ -1,0 +1,23 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "$name",
+  "alternateName": "$altName",
+  "category": "$productCategory",
+  "description": "$description",
+  "brand": {
+    "@type": "Brand",
+    "name": "$org_name"
+  },
+  "manufacturer": {
+    "@type": "Organization",
+    "name": "$org_name",
+    "url": "$org_url"
+  },
+  "audience": {
+    "@type": "BusinessAudience",
+    "audienceType": "$audienceType"
+  },
+  "additionalProperty": "$additionalProperty",
+  "keywords": "$keywords"
+}

@@ -1,0 +1,10 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "$org_name",
+  "alternateName": "$org_alternateName",
+  "url": "$org_url",
+  "description": "$org_description",
+  "knowsAbout": "$org_knowsAbout",
+  "additionalProperty": "$org_additionalProperty"
+}

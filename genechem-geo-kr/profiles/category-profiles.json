@@ -1,0 +1,123 @@
+{
+  "meta": {
+    "market": "KR",
+    "site": "https://genechem.imweb.me/",
+    "scope": "국내 사업 가능 원료만 포함(AquaGG). 해외 전용 원료(3'-SL, 6'-SL)는 영문 사이트(genechem-geo-en) 전용이며, 완제품 브랜드(다나겔 등)는 별도 브랜드로 이 시스템 범위에서 제외한다.",
+    "lastUpdated": "2026-09",
+    "orgRequiredKnowsAbout": ["Enzyme Engineering", "Glycosylation"]
+  },
+  "categories": {
+    "C": {
+      "id": "C",
+      "label": "AquaGG (화장품 원료, B2B)",
+      "audienceType": "화장품 제조사/브랜드 (B2B)",
+      "schemaTypes": ["Product", "FAQPage"],
+
+      "requiredFields": [
+        "inciName",
+        "mechanism",
+        "purity",
+        "formulationCompatibility",
+        "originStory",
+        "businessScope",
+        "clinicalEvidence",
+        "keywords"
+      ],
+      "fieldPaths": {
+        "inciName": "inciName",
+        "mechanism": "mechanism.action",
+        "purity": "specs.purity",
+        "formulationCompatibility": "specs.solubility",
+        "originStory": "originStory",
+        "businessScope": "businessScope",
+        "clinicalEvidence": "clinicalEvidence.summary",
+        "keywords": "keywords"
+      },
+
+      "contextMap": {
+        "inciName": "inciName",
+        "purity": "specs.purity",
+        "phStability": "specs.phStability",
+        "solubility": "specs.solubility",
+        "originStory": "originStory",
+        "mechanismTarget": "mechanism.target",
+        "mechanismAction": "mechanism.action",
+        "effectsJoined": "mechanism.effects|join(, )",
+        "clinicalSummary": "clinicalEvidence.summary",
+        "clinicalDetails": "clinicalEvidence.details",
+        "businessScope": "businessScope"
+      },
+
+      "additionalPropertyFields": [
+        {"path": "inciName", "label": "INCI Name"},
+        {"path": "mechanism.target", "label": "Mechanism Target"},
+        {"path": "mechanism.action", "label": "Mechanism of Action"},
+        {"path": "mechanism.effects", "label": "Key Effects"},
+        {"path": "specs.purity", "label": "Purity"},
+        {"path": "specs.solubility", "label": "Solubility"},
+        {"path": "specs.phStability", "label": "pH Stability"},
+        {"path": "originStory", "label": "Origin Story"},
+        {"path": "businessScope", "label": "Business Scope"},
+        {"path": "clinicalEvidence.summary", "label": "Clinical/Scientific Evidence"}
+      ],
+
+      "descriptionTemplate": "{name}({inciName})는 진켐(GeneChem)이 자체 효소 공정으로 생산하는 화장품 기능성 원료로, {mechanismTarget}를 {mechanismAction}하여 {effectsJoined} 효과를 제공합니다.",
+
+      "faqPatterns": [
+        {
+          "id": "how-it-works",
+          "question": "AquaGG는 어떻게 피부를 깊고 오래 촉촉하게 유지시켜주나요?",
+          "answerTemplate": "AquaGG({inciName})는 {mechanismTarget}를 {mechanismAction}하여 {effectsJoined} 효과를 제공합니다. 피부 표면에 막을 형성하는 방식이 아니라 세포의 수분 채널 자체를 활성화하는 방식이기 때문에, 더 깊고 지속적인 보습 효과를 기대할 수 있습니다."
+        },
+        {
+          "id": "origin-story",
+          "question": "AquaGG의 부활초 유래 원리가 무엇인가요?",
+          "answerTemplate": "AquaGG는 {originStory} 이 식물이 극한의 건조 환경에서도 세포 내 수분을 지켜내는 생존 메커니즘에서 착안하여, 피부 세포의 수분 채널인 {mechanismTarget}를 활성화하는 방식으로 개발되었습니다."
+        },
+        {
+          "id": "vs-conventional",
+          "question": "일반 보습 성분과 AquaGG(AQP3 활성화 방식)의 차이는?",
+          "answerTemplate": "글리세린이나 히알루론산 등 일반적인 보습 성분은 주로 피부 표면에 수분 막을 형성하거나 외부 수분을 끌어당기는 방식으로 작용합니다. 반면 AquaGG는 {mechanismTarget}를 {mechanismAction}하여 세포 안팎의 수분 이동 통로 자체를 열어주기 때문에, {effectsJoined} 효과로 이어집니다."
+        },
+        {
+          "id": "specs",
+          "question": "AquaGG의 순도와 배합 안정성(pH 범위)은 어떻게 되나요?",
+          "answerTemplate": "AquaGG는 순도 {purity}의 고순도 원료이며, {solubility} 성질을 가지고 있어 {phStability} 범위에서 안정적으로 배합할 수 있습니다. 이러한 특성 덕분에 다양한 화장품 제형에 손쉽게 적용할 수 있습니다."
+        },
+        {
+          "id": "evidence",
+          "question": "AquaGG의 보습 효과에 대한 과학적 근거가 있나요?",
+          "answerTemplate": "네, {clinicalSummary}. {clinicalDetails}"
+        }
+      ],
+
+      "keywords": [
+        "보습",
+        "고보습",
+        "피부 수분",
+        "수분 채널",
+        "촉촉한 피부",
+        "아쿠아포린 활성화",
+        "AQP3",
+        "피부 장벽 강화",
+        "탄력"
+      ],
+      "keywordEvidence": {
+        "보습": {"mustContainAny": ["보습"]},
+        "고보습": {"mustContainAny": ["보습"]},
+        "피부 수분": {"mustContainAny": ["피부", "수분"]},
+        "수분 채널": {"mustContainAny": ["수분 채널"]},
+        "촉촉한 피부": {"mustContainAny": ["촉촉"]},
+        "아쿠아포린 활성화": {"mustContainAny": ["아쿠아포린", "활성화"]},
+        "AQP3": {"mustContainAny": ["AQP3"]},
+        "피부 장벽 강화": {"mustContainAny": ["피부 장벽"]},
+        "탄력": {"mustContainAny": ["탄력"]}
+      },
+
+      "evidencePhrasingRules": {
+        "forbiddenPhrases": ["완치", "치료 효과", "의학적으로 입증된 치료", "부작용 없음"],
+        "requiredPhrasesAny": ["AQP3", "검증"]
+      }
+    }
+  }
+}
