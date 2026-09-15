@@ -1,5 +1,22 @@
 # CHANGELOG — genechem-geo-kr
 
+## 2026-09 갱신 (6): 오프페이지 노출 대응 — 원료 디렉토리/미디어 아웃리치 문구 초안 추가
+
+- 배경: "AQP3 활성화 화장품 원료 공급 회사"처럼 브랜드명이 없는 실제 검색 질의를
+  구글/Gemini에서 테스트한 결과, `site:genechem.co.kr`/`site:genechem.imweb.me`로는
+  콘텐츠가 정확히 색인·요약되는 것이 확인됐으나(즉 JSON-LD/스키마 자체는 정상 작동),
+  브랜드명 없는 일반 질의에서는 진켐이 전혀 노출되지 않고 원료 디렉토리형 사이트
+  (대한화장품협회 성분사전, ezcos.co.kr, chemknock.co.kr, 하나케어)와 뷰티 매체
+  (닥터오라클 등)만 노출됨을 확인
+- 판단: 이는 온페이지 스키마 품질 문제가 아니라 오프페이지(제3자 등재/백링크) 부족
+  문제 — 이 시스템(JSON-LD 생성 파이프라인)의 범위를 벗어나지만, 실제 노출 개선에
+  필요한 다음 단계이므로 별도 산출물로 기록
+- `outreach/directory-listings.md` 신설: 검색 시 상위 노출이 확인된 디렉토리
+  사이트 등재용 회사소개/원료소개 문구 초안 (짧은 버전/긴 버전)
+- `outreach/media-pitch.md` 신설: 뷰티 전문 매체 대상 보도자료 및 피칭 이메일 초안
+- 두 문서 모두 `data/ingredients.json`에 이미 존재하는 검증된 사실만 재사용 —
+  임상 수치, 특허번호 등 미확보 정보는 대괄호로 명시하고 절대 임의로 채우지 않음
+
 이 문서는 국문 사이트(https://genechem.imweb.me/) GEO/AEO 구조화 데이터의 월별 변경 이력을 기록합니다.
 매달 `data/ingredients.json`을 갱신하고 `python3 generate.py && python3 validate.py`를 실행한 뒤,
 `output/kr/combined-header-code.html`을 아임웹 SEO > Header Code에 재배포합니다.
