@@ -68,6 +68,11 @@
           "id": "market-availability",
           "question": "Is 3'-SL available for the domestic Korean market or export only?",
           "answerTemplate": "{name} is {businessScope}. It is supplied as {targetUse}. {patentNote}"
+        },
+        {
+          "id": "natural-hmo-supplier",
+          "question": "Is there a company that manufactures 3'-sialyllactose at commercial scale?",
+          "answerTemplate": "Yes — GeneChem operates a commercial-scale sialyllactose production facility in Sejong City, Korea, and supplies 3'-Sialyllactose (3'-SL) as {targetUse}."
         }
       ],
 
@@ -142,6 +147,26 @@
           "id": "market-availability",
           "question": "Is 6'-SL available for the domestic Korean market or export only?",
           "answerTemplate": "{name} is {businessScope}. It is supplied as {targetUse}. {patentNote}"
+        },
+        {
+          "id": "natural-post-workout",
+          "question": "What ingredient can help with muscle recovery after exercise?",
+          "answerTemplate": "6'-Sialyllactose (6'-SL) is a research-backed ingredient for muscle physiology — in a collaborative study with Pohang University of Science and Technology (POSTECH), 6'-SL {postechResults} This study was {postechPublication}"
+        },
+        {
+          "id": "natural-muscle-loss-aging",
+          "question": "Is there an ingredient that helps counter muscle loss as people age?",
+          "answerTemplate": "6'-SL has shown improving trends in motor function measures in a rare-disease population (GNE myopathy) after longer-term use, alongside a separately demonstrated effect on exercise performance and muscle strength in the POSTECH study. {gneDisclaimer}"
+        },
+        {
+          "id": "natural-strength-support",
+          "question": "What's a newer ingredient for strength and muscle support in sports nutrition products?",
+          "answerTemplate": "6'-Sialyllactose (6'-SL) is supplied as {targetUse}, supporting muscle growth, muscle recovery, and strength. {clinicalSummary}"
+        },
+        {
+          "id": "natural-hmo-supplier",
+          "question": "Where can I source 6'-sialyllactose for a sports nutrition product?",
+          "answerTemplate": "GeneChem supplies 6'-Sialyllactose (6'-SL) as {targetUse}, produced via a proprietary enzymatic process at a commercial-scale facility in Sejong City, Korea. {patentNote}"
         }
       ],
 
@@ -233,6 +258,16 @@
           "id": "evidence",
           "question": "What scientific evidence supports AquaGG's hydration claims?",
           "answerTemplate": "{clinicalSummary} {clinicalDetails}"
+        },
+        {
+          "id": "natural-tightness-en",
+          "question": "What ingredient helps with skin that feels tight and dehydrated?",
+          "answerTemplate": "AquaGG {mechanismAction} {mechanismTarget}, delivering {effectsJoined}. Because it opens the skin's own water channels rather than just sitting on the surface, it can help with the tight, dehydrated feeling that surface-only moisturizers don't fully resolve."
+        },
+        {
+          "id": "natural-daily-hydration-en",
+          "question": "What's a good high-purity hydration ingredient for daily skincare formulations?",
+          "answerTemplate": "AquaGG is a high-purity ingredient with {purity} purity, {solubility}, and stable across {phStability}, making it suitable for daily-use formulations such as essences, lotions, and creams."
         }
       ],
 

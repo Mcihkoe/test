@@ -197,6 +197,36 @@
           "answerTemplate": "네, 진켐은 특허 보유 기업입니다. {org_patent_note}"
         },
         {
+          "id": "natural-tightness",
+          "cluster": "보습",
+          "question": "세안 후 피부가 자꾸 당겨요. 어떤 보습 원료가 도움이 될까요?",
+          "answerTemplate": "세안 후 당김은 피부 속 수분이 부족할 때 흔히 나타나는 현상입니다. AquaGG는 {mechanismTarget}를 {mechanismAction}하여 세포 안쪽부터 수분을 채워주기 때문에, 표면에만 막을 씌우는 성분보다 당김 완화에 더 도움이 될 수 있습니다."
+        },
+        {
+          "id": "natural-inner-moisture",
+          "cluster": "보습",
+          "question": "속당김 없이 촉촉함이 오래가는 원료가 있나요?",
+          "answerTemplate": "AquaGG는 {effectsJoined} 효과를 제공하며, 세포의 수분 채널({mechanismTarget})을 직접 활성화하는 방식이라 표면 보습 성분 대비 속당김 완화와 지속력 면에서 도움이 될 수 있습니다."
+        },
+        {
+          "id": "natural-daily-moisture",
+          "cluster": "보습",
+          "question": "매일 쓰기 좋은 고보습 원료를 찾고 있는데 추천해주실 수 있나요?",
+          "answerTemplate": "AquaGG는 순도 {purity}의 고순도 보습 원료로, {solubility} 성질과 {phStability} 안정성 덕분에 다양한 데일리 스킨케어 제품에 배합하기 좋습니다."
+        },
+        {
+          "id": "natural-oem-supplier",
+          "cluster": "사업/공급",
+          "question": "국내에서 보습 기능성 화장품 원료를 공급하는 회사가 있나요?",
+          "answerTemplate": "네, 진켐(GeneChem)이 자체 효소 공정으로 생산한 보습 기능성 원료 AquaGG를 국내 화장품 제조사/브랜드에 B2B로 공급하고 있습니다."
+        },
+        {
+          "id": "natural-oem-match",
+          "cluster": "사업/공급",
+          "question": "화장품 OEM/ODM 진행 시 배합할 기능성 원료는 어디서 구할 수 있나요?",
+          "answerTemplate": "AquaGG는 화장품 제조사 및 브랜드를 대상으로 한 B2B 원료로, OEM/ODM 제품 기획 시 보습·피부 장벽 강화 컨셉의 배합 원료로 검토하실 수 있습니다."
+        },
+        {
           "id": "who-can-buy",
           "cluster": "사업/공급",
           "question": "AquaGG는 어떤 기업이 구매할 수 있나요?",

@@ -1,5 +1,22 @@
 # CHANGELOG — genechem-geo-en
 
+## 2026-09 update: consumer/B2B natural-language FAQ additions (7 new entries)
+
+- Background: real search testing showed expert terms ("AQP3 activation") already surface,
+  but general consumers and B2B buyers search in plainer language — "muscle recovery after
+  exercise," "skin that feels tight and dehydrated," "where can I source [ingredient]" — that
+  wasn't represented in the FAQ set.
+- Category A (3'-SL): added 1 FAQ — commercial-scale manufacturer/supplier question.
+- Category B (6'-SL): added 4 FAQs — post-workout muscle recovery, age-related muscle loss,
+  sports-nutrition strength support, and sourcing/supplier questions. All reuse the existing
+  GNE myopathy + POSTECH study data and keep the rare-disease disclaimer intact.
+- Category C (AquaGG): added 2 FAQs — "tight, dehydrated skin" and "daily-use high-purity
+  hydration ingredient," both reusing existing mechanism/spec data.
+- Deliberately did NOT add FAQs for joint health (sialyllactose-family ingredients don't
+  appear in real consumer joint-supplement content at all) or sleep/relaxation (GeneChem has
+  no ingredient with any evidence in that category) — adding either would create keyword
+  relevance the project's own evidence doesn't support.
+
 ## 2026-09 note: Siallac® cross-linking — explicitly not pursued
 
 - After the off-page outreach update below flagged Siallac (GeneChem's own
