@@ -1,5 +1,38 @@
 # CHANGELOG — genechem-geo-en
 
+## 2026-09 update: off-page outreach drafts — directory listings + trade media pitches
+
+- Background: same off-page diagnostic done for genechem-geo-kr, applied here. Real
+  search testing on brand-less category queries showed a mixed picture, different
+  from AquaGG/KR:
+  - 3'-SL/6'-SL sialyllactose manufacturing already has some third-party authority —
+    NutraIngredients.com ran two promotional features on GeneChem's Sejong City HMO
+    plant, and GeneChem is named alongside dsm-firmenich/Jennewein Biotechnologie for
+    the broad query "sialyllactose HMO ingredient manufacturer company."
+  - But narrower buyer-intent queries ("3'-sialyllactose ingredient supplier
+    manufacturer B2B", "6'-sialyllactose supplier muscle recovery supplement
+    ingredient", "AQP3 activation cosmetic ingredient supplier") return only
+    competitor supplier sites and ingredient marketplaces (SpecialChem,
+    MakingCosmetics, NM PharmTech, China HMOS, BOC Sciences, Simson Pharma) —
+    genechem.co.kr itself does not appear in any of the three.
+  - Discovered GeneChem's own site (genechem.co.kr/Notices) has announced a
+    consumer brand "Siallac® Gut Health" (separate site siallac.com, sold on
+    Amazon) that already ranks for consumer-facing 6'-SL queries, but has no
+    linkage back to genechem.co.kr as the ingredient manufacturer — flagged as a
+    separate, optional fix (out of this project's B2B ingredient scope, same as
+    Danagel) rather than applied automatically.
+- `outreach/directory-listings.md` added: company/ingredient listing copy for
+  SpecialChem and MakingCosmetics (AquaGG) plus notes on B2B ingredient sourcing
+  platforms for 3'-SL/6'-SL, and the Siallac cross-linking note.
+- `outreach/media-pitch.md` added: press release drafts for AquaGG, 3'-SL, and 6'-SL
+  targeted at NutraIngredients (follow-up angle), IngredientsNetwork, Nutritional
+  Outlook, and Cosmetics & Toiletries, plus a short pitch email template.
+- All copy reuses only facts already present in `data/ingredients.json` /
+  `profiles/category-profiles.json`; 3'-SL stays mechanism-based/hedged and 6'-SL
+  keeps the GNE myopathy + POSTECH + rare-disease disclaimer intact, per this
+  project's existing `evidencePhrasingRules`. No new clinical numbers, patent
+  numbers, or contact details were invented — left as explicit placeholders.
+
 This file tracks monthly changes to the GEO/AEO structured data for the English site
 (https://genechem.co.kr/). Each month, update `data/ingredients.json`, run
 `python3 generate.py && python3 validate.py`, then redeploy the contents of
