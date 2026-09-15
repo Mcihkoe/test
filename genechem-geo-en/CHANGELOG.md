@@ -1,5 +1,18 @@
 # CHANGELOG — genechem-geo-en
 
+## 2026-09 note: Siallac® cross-linking — explicitly not pursued
+
+- After the off-page outreach update below flagged Siallac (GeneChem's own
+  consumer brand, found via search testing) as unlinked to genechem.co.kr,
+  confirmed with GeneChem that Siallac is a brand page managed by an external
+  marketing agency.
+- Decision: do not add any site-level cross-linking or shared JSON-LD
+  (e.g. schema.org `brand`/`manufacturer` references) between genechem.co.kr
+  and siallac.com. That is the agency's domain to manage, not this project's.
+- `outreach/directory-listings.md`'s Siallac section was reworded from a
+  "consider doing this" recommendation to a plain factual note — no code or
+  schema changes were made.
+
 ## 2026-09 update: off-page outreach drafts — directory listings + trade media pitches
 
 - Background: same off-page diagnostic done for genechem-geo-kr, applied here. Real

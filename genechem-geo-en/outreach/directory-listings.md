@@ -140,15 +140,9 @@ with Amazon listings) already ranks for consumer-facing 3'-SL/6'-SL queries
 
 This is a downstream consumer brand, out of scope for this B2B ingredient
 GEO system per this project's own scope note (finished consumer products are
-excluded, same as Danagel). But right now none of that existing traffic or
-authority flows back to genechem.co.kr as the ingredient manufacturer. Two
-low-effort, legitimate fixes worth considering separately from the directory
-listings above:
-- Add a clear "ingredient supplied by GeneChem Inc." mention + link from
-  siallac.com back to genechem.co.kr.
-- Add a "Siallac® is a consumer brand built on GeneChem's 6'-SL/3'-SL" note
-  (with link) on genechem.co.kr, so an AI or search engine connecting the two
-  brands finds GeneChem named as the manufacturer.
-
-This is a decision for GeneChem to make (it touches a second site/brand this
-project doesn't own), not something applied automatically here.
+excluded, same as Danagel). Confirmed with GeneChem: Siallac is a brand page
+managed by an external marketing agency, so cross-linking or connecting it
+to genechem.co.kr (site-level links, shared JSON-LD, etc.) is **not** being
+pursued — that's the agency's domain to manage, not this project's. No
+action taken here; this note is kept only as a factual record of what
+search testing found, not a recommendation.
