@@ -9,6 +9,7 @@ Usage:
 
 Editing ingredients.json and re-running this script regenerates all of output/en/.
 """
+import html
 import json
 import re
 from pathlib import Path
@@ -119,6 +120,17 @@ def wrap_script(data):
     return f'<script type="application/ld+json">\n{body}\n</script>\n'
 
 
+def build_page_meta_keywords_tag(ingredient):
+    """Each ingredient lives on its own page, so meta keywords are page-specific --
+    unlike the KR site's single combined tag. Only reuses keywords already registered
+    in Product.keywords and verified by validate.py's keyword-relevance check."""
+    keywords = ingredient.get("keywords", [])
+    if not keywords:
+        return None
+    content = html.escape(", ".join(keywords), quote=True)
+    return f'<meta name="keywords" content="{content}">\n'
+
+
 def strip_context(node):
     return {k: v for k, v in node.items() if k != "@context"}
 
@@ -175,6 +187,12 @@ def main():
         faq_jsonld = substitute(faq_template, {"faqItems": faq_items})
         (OUTPUT_DIR / f"{ingredient['id']}-faq.html").write_text(wrap_script(faq_jsonld), encoding="utf-8")
 
+        page_meta_keywords_tag = build_page_meta_keywords_tag(ingredient)
+        if page_meta_keywords_tag:
+            (OUTPUT_DIR / f"{ingredient['id']}-meta-keywords.html").write_text(
+                page_meta_keywords_tag, encoding="utf-8"
+            )
+
         graph.append(strip_context(product_jsonld))
         graph.append(strip_context(faq_jsonld))
         generated.append(ingredient["id"])
@@ -185,6 +203,8 @@ def main():
     print(f"[generate] Generated JSON-LD for {len(generated)} ingredient(s): {', '.join(generated)} -> {OUTPUT_DIR}")
     print("[generate] combined-header-code.html contains Organization + all ingredient Product/FAQ nodes in one @graph.")
     print("[generate] Paste the contents of combined-header-code.html into the site's SEO > Header Code field.")
+    print("[generate] {id}-meta-keywords.html is page-specific (each ingredient has its own page) -- "
+          "paste into that ingredient's own page SEO settings, not the sitewide Header Code.")
 
 
 if __name__ == "__main__":

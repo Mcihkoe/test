@@ -64,7 +64,8 @@
         {"path": "specs.phStability", "label": "pH Stability"},
         {"path": "originStory", "label": "Origin Story"},
         {"path": "businessScope", "label": "Business Scope"},
-        {"path": "clinicalEvidence.summary", "label": "Clinical/Scientific Evidence"}
+        {"path": "clinicalEvidence.summary", "label": "Clinical/Scientific Evidence"},
+        {"path": "consumerSummary", "label": "실사용 체감 요약"}
       ],
 
       "descriptionTemplate": "{name}({inciName})는 진켐(GeneChem)이 자체 효소 공정으로 생산하는 화장품 기능성 원료로, {mechanismTarget}를 {mechanismAction}하여 {effectsJoined} 효과를 제공합니다.",
@@ -251,7 +252,26 @@
         "피부 장벽 강화",
         "탄력",
         "글리세릴글루코사이드",
-        "제형 안정성"
+        "제형 안정성",
+        "속당김 방지",
+        "속보습",
+        "데일리 보습",
+        "수분감",
+        "유수분 밸런스",
+        "보습 지속력",
+        "수분 공급",
+        "지속적인 보습",
+        "고순도 원료",
+        "피부 촉촉함",
+        "화장품 기능성 원료",
+        "수분 순환",
+        "아쿠아포린-3",
+        "피부 세포 수분",
+        "보습 화장품 원료",
+        "수용성 보습 원료",
+        "부활초 성분",
+        "국내 화장품 원료",
+        "과학적으로 검증된 보습"
       ],
       "keywordEvidence": {
         "보습": {"mustContainAny": ["보습"]},
@@ -264,7 +284,26 @@
         "피부 장벽 강화": {"mustContainAny": ["피부 장벽"]},
         "탄력": {"mustContainAny": ["탄력"]},
         "글리세릴글루코사이드": {"mustContainAny": ["글리세릴글루코사이드"]},
-        "제형 안정성": {"mustContainAny": ["pH", "안정"]}
+        "제형 안정성": {"mustContainAny": ["pH", "안정"]},
+        "속당김 방지": {"mustContainAny": ["당김"]},
+        "속보습": {"mustContainAny": ["속보습"]},
+        "데일리 보습": {"mustContainAny": ["데일리"]},
+        "수분감": {"mustContainAny": ["수분감"]},
+        "유수분 밸런스": {"mustContainAny": ["유수분 밸런스"]},
+        "보습 지속력": {"mustContainAny": ["보습 지속력"]},
+        "수분 공급": {"mustContainAny": ["수분 공급"]},
+        "지속적인 보습": {"mustContainAny": ["지속적인"]},
+        "고순도 원료": {"mustContainAny": ["고순도"]},
+        "피부 촉촉함": {"mustContainAny": ["촉촉"]},
+        "화장품 기능성 원료": {"mustContainAny": ["기능성 원료"]},
+        "수분 순환": {"mustContainAny": ["수분 순환"]},
+        "아쿠아포린-3": {"mustContainAny": ["아쿠아포린-3"]},
+        "피부 세포 수분": {"mustContainAny": ["피부 세포"]},
+        "보습 화장품 원료": {"mustContainAny": ["보습"]},
+        "수용성 보습 원료": {"mustContainAny": ["수용성"]},
+        "부활초 성분": {"mustContainAny": ["부활초"]},
+        "국내 화장품 원료": {"mustContainAny": ["국내"]},
+        "과학적으로 검증된 보습": {"mustContainAny": ["과학적으로 검증"]}
       },
 
       "evidencePhrasingRules": {

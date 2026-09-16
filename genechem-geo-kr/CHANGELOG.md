@@ -1,5 +1,17 @@
 # CHANGELOG — genechem-geo-kr
 
+## 2026-09 갱신 (8): meta keywords 9개 → 30개로 확장 (네이버 API 실검색 조사 기반)
+
+- 네이버 블로그/지식iN 검색으로 "보습 화장품 성분", "고보습 크림 성분", "피부 보습 성분" 등을
+  조사해 실제 소비자가 쓰는 표현(속당김, 속보습, 데일리 보습, 유수분 밸런스 등) 확인
+- 타 원료명(히알루론산, 세라마이드, 스쿠알란 등)은 AquaGG의 실제 성분이 아니므로 키워드로
+  가져오지 않음 — 원료 오분류/거짓 관련성 방지
+- `data/ingredients.json`에 `consumerSummary` 필드 신설 — 신규 키워드의 근거가 되는 실제
+  텍스트를 스키마 출력에도 노출(숨겨진 검증용 텍스트가 아니라 실제 Product.additionalProperty로 노출)
+- `profiles/category-profiles.json`: `additionalPropertyFields`에 "실사용 체감 요약" 추가,
+  `keywords` 11 → 30개, `keywordEvidence` 30건 모두 등록 — 전부 `data/ingredients.json`의
+  실제 텍스트로 근거 확인됨 (validate.py 0 오류/0 경고)
+
 ## 2026-09 갱신 (7): 소비자 자연어 FAQ 5종 추가 (속당김/속보습, OEM 문의)
 
 - 배경: "AQP3 활성화" 같은 전문 용어는 이미 검색에 잘 걸리지만, 일반 소비자/기업 담당자는

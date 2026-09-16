@@ -1,5 +1,32 @@
 # CHANGELOG — genechem-geo-en
 
+## 2026-09 update: per-page meta keywords added for 3'-SL (gut, small joint subset) and 6'-SL (muscle)
+
+- Background: EN site previously had zero `<meta name="keywords">` tags (only schema.org
+  Product.keywords existed, and only for AquaGG). Researched via English-language industry
+  sources (NutraIngredients, Nutritional Outlook, sports-nutrition trade press) rather than
+  Naver, since 3'-SL/6'-SL are export-only and target overseas B2B buyers, not domestic Korean
+  consumers -- see `research/domestic-keyword-reference.md` for the Naver-sourced Korean terms
+  that were researched but deliberately NOT applied for that reason.
+- Joint-related keywords for 3'-SL kept to 5 entries, explicitly labeled "(exploratory)" /
+  "mechanism research" -- per this project's earlier finding that sialyllactose-family
+  ingredients don't appear in real consumer joint-supplement content at all, expanding this
+  category further than the existing hedged claim would misrepresent actual relevance.
+- `data/ingredients.json`: added `keywords` arrays to `3-sl` (25: 20 gut/digestive + 5 joint)
+  and `6-sl` (25: muscle recovery/strength, all traceable to the existing GNE myopathy +
+  POSTECH clinical data).
+- `profiles/category-profiles.json`: added matching `keywords` + `keywordEvidence` to
+  categories A and B (mirrors the pattern already used for category C).
+- `generate.py`: added `build_page_meta_keywords_tag()`, writing `output/en/{id}-meta-keywords.html`
+  per ingredient -- these are page-specific (each ingredient has its own page), so unlike KR's
+  single combined tag, they are NOT added to the sitewide `combined-header-code.html`; paste
+  each into that ingredient's own page SEO settings.
+- `validate.py`: `*-meta-keywords.html` excluded from the JSON-LD structural check (plain
+  meta tag, not a script block) -- same pattern KR already uses for its meta files.
+- All keywords verified against `keywordEvidence` (0 errors/0 warnings after one fix: the
+  "HMO-derived ingredient" evidence term had to match "derived" rather than "HMO-derived",
+  since the actual text is "(HMO)-derived" with a parenthesis in between).
+
 ## 2026-09 update: consumer/B2B natural-language FAQ additions (7 new entries)
 
 - Background: real search testing showed expert terms ("AQP3 activation") already surface,

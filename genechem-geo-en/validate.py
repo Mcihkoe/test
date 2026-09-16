@@ -142,6 +142,8 @@ def validate_output_files(errors):
         errors.append(f"[output] No .html files found in {OUTPUT_DIR}. Run generate.py first.")
         return
     for f in html_files:
+        if f.name.endswith("-meta-keywords.html"):
+            continue
         text = f.read_text(encoding="utf-8")
         if '<script type="application/ld+json">' not in text:
             errors.append(f"[output] {f.name}: missing <script type=\"application/ld+json\"> tag.")
