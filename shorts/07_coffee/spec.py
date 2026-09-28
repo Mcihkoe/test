@@ -16,7 +16,7 @@ THUMB_CUE = (2, "0.3")
 
 IMAGES = {  # Canva media ids (None = not generated yet)
     "01.jpg": 'MAHWdWxrF9g',
-    "02.jpg": None,
+    "02.jpg": None,  # safety-filtered -> close-up crop of 04.jpg
     "03.jpg": 'MAHWdczojSE',
     "04.jpg": 'MAHWdeyGaes',
     "05.jpg": 'MAHWdfPoE7g',
@@ -34,7 +34,7 @@ SCENES = [
     dict(img="02.jpg", kb="panr",
          lines=[dict(tts="옛날 에티오피아의 염소지기, 칼디.", chunks=["옛날 에티오피아의", "염소지기 '칼디'"])],
          els=[E("📍 에티오피아", 50, 50, 70, "tag", (("pop", "s+.2", .4),)),
-              E("칼디", 700, 120, 110, "bubble", (("pop", "0.1", .45),), "--r:5deg")],
+              E("칼디", 720, 560, 110, "bubble", (("pop", "0.1", .45),), "--r:5deg")],
          sfx=[("pop", "0.1")]),
     dict(img="03.jpg", kb="zoomin",
          lines=[dict(tts="어느 날 염소들이 빨간 열매를 먹더니, 밤새 펄쩍펄쩍 춤을 추기 시작함.",
