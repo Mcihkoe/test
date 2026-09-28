@@ -46,6 +46,19 @@ def TCARD(emoji, label, x, y, c, w=300, h=380):
              x, y, 0, "box", (("pop", c, .45),), st)
 
 
+def RING(x, y, d, c, color="#00e676"):
+    """Highlight circle (benchmark-channel style)."""
+    return E("", x, y, 0, "box", (("pop", c, .4),),
+             f"width:{d}px;height:{d}px;border:14px solid {color};border-radius:50%;box-shadow:0 0 0 4px rgba(0,0,0,.35)")
+
+
+def ARROW(x, y, c, rot=0, size=220, color="#ff1f1f"):
+    """Red pointer arrow; rot=0 points right, 90 points down."""
+    svg = (f'<svg width="{size}" height="{size}" viewBox="0 0 100 100" style="transform:rotate({rot}deg)">'
+           f'<path d="M6 40 H58 V20 L96 50 L58 80 V60 H6 Z" fill="{color}" stroke="#fff" stroke-width="5" stroke-linejoin="round"/></svg>')
+    return E(svg, x, y, 0, "box", (("pop", c, .4), ("nudge", c + "+.4", .6)), "")
+
+
 # ------------------------------------------------------------------ TTS
 def tts(text, cache_dir):
     key = re.sub(r"[^\w]", "", text)[:40] + f"_{abs(hash(text)) % 10**8}"
@@ -198,6 +211,14 @@ body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family:NSK,
 @keyframes grow{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
 @keyframes dim{0%{filter:none}100%{filter:brightness(.25) saturate(.4)}}
 @keyframes recolor{0%{filter:none}100%{filter:hue-rotate(var(--h,0deg)) saturate(1.3)}}
+@keyframes nudge{0%,100%{translate:0 0}50%{translate:14px 10px}}
+@keyframes kbzoomin{0%{transform:scale(1)}100%{transform:scale(1.14)}}
+@keyframes kbzoomout{0%{transform:scale(1.16)}100%{transform:scale(1.02)}}
+@keyframes kbpanl{0%{transform:scale(1.14) translateX(3.5%)}100%{transform:scale(1.14) translateX(-3.5%)}}
+@keyframes kbpanr{0%{transform:scale(1.14) translateX(-3.5%)}100%{transform:scale(1.14) translateX(3.5%)}}
+@keyframes kbpanu{0%{transform:scale(1.14) translateY(3.5%)}100%{transform:scale(1.14) translateY(-3.5%)}}
+.kb{position:absolute;inset:0;background-size:cover;background-position:center}
+.vig{position:absolute;inset:0;background:radial-gradient(circle,transparent 60%,rgba(0,0,0,.35))}
 @keyframes spread{0%{transform:scale(.2);opacity:0}100%{transform:scale(1);opacity:1}}
 """
 
@@ -205,7 +226,7 @@ EASE = {"pop": "cubic-bezier(.2,1.4,.4,1)", "stamp": "ease-out", "flyR": "cubic-
         "flyL": "cubic-bezier(.2,.9,.3,1)", "dropIn": "cubic-bezier(.5,0,.5,1.3)", "flash": "ease-out",
         "show": "steps(1)", "hide": "steps(1)", "grab": "ease-in", "spin": "linear", "blink": "steps(1)",
         "sail": "ease-in-out", "sneak": "ease-in-out", "zfloat": "ease-out", "grow": "ease-out"}
-LOOPS = {"pulse", "bob", "wiggle", "spin", "blink"}
+LOOPS = {"pulse", "bob", "wiggle", "spin", "blink", "nudge"}
 
 
 def load_spec(d):
@@ -250,9 +271,9 @@ def build(short_dir, preview=False):
     subs[-1][1] = total
 
     def cue(scn, c):
-        base, _, off = c.partition("+")
+        base, *offs = c.split("+")
         v = scn["s"] if base == "s" else scn["cues"][base]
-        return v + (float(off) if off else 0)
+        return v + sum(float(o) for o in offs)
 
     # ---- audio
     N = int(total * SR)
@@ -296,7 +317,16 @@ def build(short_dir, preview=False):
 
     scenes_html = ""
     for scn in scenes:
-        inner = f'<div class="bg" style="background:{scn["sc"]["bg"]}"></div>' + "".join(el_html(scn, e) for e in scn["sc"]["els"])
+        sc = scn["sc"]
+        inner = f'<div class="bg" style="background:{sc.get("bg", "#222")}"></div>'
+        if sc.get("img"):
+            ip = os.path.join(short_dir, "images", sc["img"])
+            if os.path.exists(ip):
+                inner += (f'<div class="kb" style="background-image:url(\'file://{ip}\');animation:kb{sc.get("kb", "zoomin")} '
+                          f'{scn["e"] - scn["s"] + .4:.2f}s linear {scn["s"]:.3f}s 1 normal both"></div><div class="vig"></div>')
+            else:
+                inner += f'<div class="x tag" style="left:40px;top:40px;font-size:40px">missing image: {sc["img"]}</div>'
+        inner += "".join(el_html(scn, e) for e in sc.get("els", []))
         scenes_html += (f'<div class="scene" data-s="{scn["s"]:.3f}" data-e="{scn["e"]:.3f}"><div class="scin" style="animation:sceneIn .35s '
                         f'cubic-bezier(.2,.9,.3,1) {scn["s"]:.3f}s 1 normal both">{inner}</div></div>')
     accent = getattr(spec, "ACCENT", "#ff2020")
