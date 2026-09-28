@@ -25,6 +25,15 @@ PROMPTS = {
 }
 IMAGES = {k: None for k in PROMPTS}
 
+MG = {
+    "01.jpg": ("radial-gradient(circle,#ff8a80,#b71c1c 78%)", [E("🍓", 320, 230, 440, anims=(("pop", "s", .45),))]),
+    "02.jpg": ("radial-gradient(circle,#ffcdd2,#c62828 80%)", [E("🍓", 250, 260, 400, anims=(("pop", "s", .45),)), E("🔍", 640, 380, 260, anims=(("pop", "0.0+.3", .4), ("wiggle", "0.0+.7", 1)))]),
+    "03.jpg": ("linear-gradient(#fce4ec,#f48fb1)", [E("🍓", 340, 280, 400, anims=(("pop", "s", .45), ("pulse", "s+.5", .9)))]),
+    "04.jpg": ("linear-gradient(#fff3e0,#ffcc80)", [E("🍓", 170, 320, 320, anims=(("pop", "0.1", .45),)), E("🍌", 600, 320, 320, anims=(("pop", "0.2", .45), ("wiggle", "0.3", .8)))]),
+    "05.jpg": ("linear-gradient(#c5e1a5,#33691e)", [E("🌎", 430, 220, 220, anims=(("pop", "s", .45),)), E("🍓", 130, 430, 220, anims=(("flyR", "0.2", .5),)), E("🍓", 730, 430, 220, anims=(("flyL", "0.2", .5),)), E("❤️", 480, 470, 140, anims=(("pop", "0.3", .4), ("pulse", "0.3+.4", .6)))]),
+    "06.jpg": ("radial-gradient(circle,#ff8a80,#880e4f 80%)", [E("🧺", 350, 300, 360, anims=(("pop", "s", .45),)), *[E("🍓", 120 + k * 220, 700 - (k % 2) * 60, 120, anims=(("pop", f"s+{.1 + k * .08:.2f}", .4),)) for k in range(4)]]),
+}
+
 SCENES = [
     dict(img="01.jpg", kb="zoomin",
          lines=[dict(tts="딸기 겉에 박힌 이 점들, 씨가 아님.", chunks=["딸기 겉에 박힌", "이 점들", "씨가 아님"])],

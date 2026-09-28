@@ -324,6 +324,9 @@ def build(short_dir, preview=False):
             if os.path.exists(ip):
                 inner += (f'<div class="kb" style="background-image:url(\'file://{ip}\');animation:kb{sc.get("kb", "zoomin")} '
                           f'{scn["e"] - scn["s"] + .4:.2f}s linear {scn["s"]:.3f}s 1 normal both"></div><div class="vig"></div>')
+            elif sc["img"] in getattr(spec, "MG", {}):  # motion-graphic fallback until the AI image exists
+                mg_bg, mg_els = spec.MG[sc["img"]]
+                inner += f'<div class="bg" style="background:{mg_bg}"></div>' + "".join(el_html(scn, e) for e in mg_els)
             else:
                 inner += f'<div class="x tag" style="left:40px;top:40px;font-size:40px">missing image: {sc["img"]}</div>'
         inner += "".join(el_html(scn, e) for e in sc.get("els", []))

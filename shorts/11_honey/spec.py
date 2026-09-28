@@ -26,16 +26,25 @@ PROMPTS = {
 }
 IMAGES = {k: None for k in PROMPTS}
 
+MG = {
+    "01.jpg": ("radial-gradient(circle,#ffd54f,#e65100 80%)", [E("🍯", 350, 250, 400, anims=(("pop", "s", .45), ("pulse", "s+.5", 1)))]),
+    "02.jpg": ("linear-gradient(#5d4037,#1b0f0a)", [E("🏺", 360, 300, 360, anims=(("pop", "s", .45),)), E("🔦", 60, 420, 200, anims=(("flyR", "0.0", .5),))]),
+    "03.jpg": ("radial-gradient(circle,#ffe082,#ff8f00 80%)", [E("🍯", 380, 250, 320, anims=(("pop", "s", .45),))]),
+    "04.jpg": ("repeating-linear-gradient(60deg,#ffca28 0 40px,#ffb300 40px 80px)", [E("🐝", 380, 260, 340, anims=(("pop", "s", .45), ("bob", "s+.5", .8)))]),
+    "05.jpg": ("linear-gradient(#fffde7,#ffe082)", [E("🐝", 330, 320, 230, anims=(("pop", "s", .45), ("bob", "s+.5", .8))), E("🥄", 620, 330, 300, anims=(("pop", "0.1", .45),))]),
+    "06.jpg": ("linear-gradient(#e3f2fd,#90caf9)", [E("🍯", 300, 320, 280, anims=(("pop", "s", .45),)), E("🍼", 640, 320, 280, anims=(("pop", "0.0+.2", .45),)), E("🚫", 620, 300, 320, anims=(("stamp", "0.1", .3),))]),
+}
+
 SCENES = [
     dict(img="01.jpg", kb="zoomin",
          lines=[dict(tts="유통기한이 사실상 없는 음식, 바로 꿀임.", chunks=["유통기한이 사실상 없는 음식", "바로 꿀임"])],
-         els=[E("유통기한 ∞", 330, 70, 140, "big", (("pop", "0.1", .45),), "--r:-6deg")],
+         els=[E("유통기한 ∞", 170, 70, 140, "big", (("pop", "0.1", .45),), "--r:-6deg")],
          sfx=[("sparkle", "0.1")]),
     dict(img="02.jpg", kb="zoomin",
          lines=[dict(tts="이집트 고대 무덤에서, 수천 년 된 꿀단지가 발견된 적도 있음.",
                      chunks=["이집트 고대 무덤에서", "수천 년 된 꿀단지가", "발견된 적도 있음"])],
          els=[E("📍 이집트", 50, 50, 70, "tag", (("pop", "s+.2", .4),)),
-              RING(390, 420, 320, "0.1"), E("수천 년!", 620, 90, 130, "big", (("pop", "0.2", .45),), "--r:6deg")],
+              RING(390, 420, 320, "0.1"), E("수천 년!", 420, 90, 130, "big", (("pop", "0.2", .45),), "--r:6deg")],
          sfx=[("pop", "0.1"), ("thump", "0.2", .5)]),
     dict(img="03.jpg", kb="zoomout",
          lines=[dict(tts="꿀이 안 썩는 이유는, 수분이 적고 산성이라 세균이 살 수가 없기 때문.",
