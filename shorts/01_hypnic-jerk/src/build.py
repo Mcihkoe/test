@@ -17,17 +17,14 @@ os.makedirs(OUT, exist_ok=True)
 
 # ---------------------------------------------------------------- TTS + timing
 def tts(text, path):
-    subprocess.run(["espeak-ng", "-v", "ko", "-s", "200", "-p", "42", "-a", "180", "-w", path, text], check=True)
+    import urllib.parse
+    mp3 = path[:-4] + ".mp3"
+    subprocess.run(["curl", "-sS", "--retry", "4", "-o", mp3, "https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=ko&q=" + urllib.parse.quote(text)], check=True)
+    subprocess.run([FFMPEG, "-y", "-loglevel", "error", "-i", mp3, "-af", "atempo=1.28", "-ar", str(SR), "-ac", "1", path], check=True)
     with wave.open(path) as w:
-        sr = w.getframerate()
         x = np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16).astype(np.float32) / 32768
-    # trim leading/trailing silence
-    idx = np.where(np.abs(x) > 0.02)[0]
-    x = x[max(idx[0] - 200, 0): idx[-1] + 400]
-    # resample to SR
-    n = int(len(x) * SR / sr)
-    x = np.interp(np.linspace(0, len(x) - 1, n), np.arange(len(x)), x)
-    return x
+    idx = np.where(np.abs(x) > 0.015)[0]
+    return x[max(idx[0] - 300, 0): idx[-1] + 600]
 
 
 def weight(s):
@@ -409,6 +406,6 @@ with sync_playwright() as p:
 
 subprocess.run([FFMPEG, "-y", "-loglevel", "error", "-framerate", str(FPS), "-i", os.path.join(fdir, "f%05d.jpg"),
                 "-i", os.path.join(OUT, "audio.wav"), "-c:v", "libx264", "-preset", "medium", "-crf", "20",
-                "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k", "-ar", "44100", "-shortest",
+                "-pix_fmt", "yuv420p", "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-c:a", "aac", "-b:a", "160k", "-ar", "44100", "-shortest",
                 "-movflags", "+faststart", os.path.join(OUT, "short.mp4")], check=True)
 print("done", os.path.join(OUT, "short.mp4"))
