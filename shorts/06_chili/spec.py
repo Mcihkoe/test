@@ -14,10 +14,14 @@ DESCRIPTION = """
 TAGS = ["고추", "고추유래", "김치", "백김치", "음식유래", "식재료", "역사", "잡학", "쇼츠", "shorts"]
 THUMB_CUE = (0, "0.2")
 
-IMAGES = {
-    "01.jpg": "AaDmYoSjc_-M1SWtAoQccQ", "02.jpg": "AaDmYoY51qa9eqjZmM4QJA", "03.jpg": "AaDmYofUa6DzbsSCSWPwNA",
-    "04.jpg": "AaDmYonDuddpK5RNexVzow", "05.jpg": "AaDmY-BQZFdZwEWV0idJQQ", "06.jpg": "AaDmY-HNLC_LfYHzqC3u8w",
-    "07.jpg": "AaDmY-Nhc8My28iGC4NYxw",
+IMAGES = {  # Canva media ids (None = not generated yet)
+    "01.jpg": 'MAHWdeXXP3E',
+    "02.jpg": 'MAHWde1BsLo',
+    "03.jpg": 'MAHWdf8EwAE',
+    "04.jpg": 'MAHWdTKuU1g',
+    "05.jpg": 'MAHWdZHTiOI',
+    "06.jpg": 'MAHWdQuxuvo',
+    "07.jpg": 'MAHWdbWYfQw',
 }
 
 SCENES = [

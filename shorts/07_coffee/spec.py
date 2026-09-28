@@ -14,10 +14,14 @@ DESCRIPTION = """
 TAGS = ["커피", "커피유래", "칼디", "커피전설", "음식유래", "식재료", "잡학", "쇼츠", "shorts"]
 THUMB_CUE = (2, "0.3")
 
-IMAGES = {
-    "01.jpg": "AaDmY-aehzTU-yq8cKaAIA", "02.jpg": "AaDmY-gP5gFWl3eaNOhx1g", "03.jpg": "AaDmY-mMfzvl_43C9DCw9w",
-    "04.jpg": "AaDmY_A9SSTSP8eWG9bcUg", "05.jpg": "AaDmY_HYJ4zjrCoDj0Kjcg", "06.jpg": "AaDmY_OIBRvvyY1MwqxcAQ",
-    "07.jpg": "AaDmY_UXFsFDD59br5f88Q",
+IMAGES = {  # Canva media ids (None = not generated yet)
+    "01.jpg": 'MAHWdWxrF9g',
+    "02.jpg": None,
+    "03.jpg": 'MAHWdczojSE',
+    "04.jpg": 'MAHWdeyGaes',
+    "05.jpg": 'MAHWdfPoE7g',
+    "06.jpg": 'MAHWdamIJdI',
+    "07.jpg": 'MAHWdcTWK2I',
 }
 
 SCENES = [

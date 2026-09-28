@@ -14,9 +14,14 @@ DESCRIPTION = """
 TAGS = ["파인애플", "파인애플유래", "귀족", "음식유래", "식재료", "역사", "잡학", "쇼츠", "shorts"]
 THUMB_CUE = (4, "0.1")
 
-IMAGES = {
-    "01.jpg": "AaDmZQbEpybozR5tgdzoBw", "02.jpg": "AaDmZQhOxgIkwAOfQf_jyQ", "03.jpg": "AaDmZQmzhZHMf-8kzkvDLA",
-    "04.jpg": "AaDmZQtAdyjuOUHyHPCeuQ",
+IMAGES = {  # Canva media ids (None = not generated yet)
+    "01.jpg": 'MAHWdWsY9zA',
+    "02.jpg": 'MAHWdccQAqI',
+    "03.jpg": 'MAHWdbruo6U',
+    "04.jpg": 'MAHWdXSDU1Q',
+    "05.jpg": None,
+    "06.jpg": None,
+    "07.jpg": None,
 }
 
 SCENES = [

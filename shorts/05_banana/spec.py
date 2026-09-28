@@ -14,11 +14,15 @@ DESCRIPTION = """
 TAGS = ["바나나", "그로미셸", "캐번디시", "파나마병", "음식유래", "식재료", "잡학", "쇼츠", "shorts"]
 THUMB_CUE = (3, "0.3")
 
-# Canva generate-image jobs (square) -> images/NN.jpg
-IMAGES = {
-    "01.jpg": "AaDmYhg6hwfJ_0NuJGAknw", "02.jpg": "AaDmYhm_T5c3h1emY7DELg", "03.jpg": "AaDmYhtBHfqp9C6CB8_gGg",
-    "04.jpg": "AaDmYhzOaeOOetORRJLTgA", "05.jpg": "AaDmYh5QQcdnK8H_IijTTQ", "06.jpg": "AaDmYh_foQnSNZm261rBDA",
-    "07.jpg": "AaDmYiFgAsn1BgS0xmIhdA", "08.jpg": "AaDmYiKh4yHDIf9mPrXDRA",
+IMAGES = {  # Canva media ids (None = not generated yet)
+    "01.jpg": 'MAHWdIKtb1s',
+    "02.jpg": 'MAHWdNVpYh0',
+    "03.jpg": 'MAHWdOqlKCc',
+    "04.jpg": 'MAHWdB9RohM',
+    "05.jpg": 'MAHWdaO6fKo',
+    "06.jpg": 'MAHWdXm01BM',
+    "07.jpg": 'MAHWdD1kDLw',
+    "08.jpg": 'MAHWdQDLp60',
 }
 
 SCENES = [
