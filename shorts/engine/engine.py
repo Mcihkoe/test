@@ -335,17 +335,16 @@ def build(short_dir, preview=False):
     accent = getattr(spec, "ACCENT", "#ff2020")
     html = f"""<!doctype html><html><head><meta charset="utf-8"><style>{CSS.replace('%(fonts)s', FONTS).replace('%(accent)s', accent)}</style></head><body>
 <div class="title"><div class="l1">{spec.TITLE[0]}</div><div class="l2">{spec.TITLE[1]}</div></div>
-<div class="stage">{scenes_html}</div><div class="sub" id="sub"></div><div class="progress" id="prog"></div>
+<div class="stage">{scenes_html}</div><div class="sub" id="sub"></div>
 <div class="series">{getattr(spec, 'SERIES', '')}</div>
 <script>
 const SUBS={json.dumps([[round(a, 3), round(b, 3), c] for a, b, c in subs], ensure_ascii=False)},TOTAL={total:.3f};
-const scenes=[...document.querySelectorAll('.scene')],sub=document.getElementById('sub'),prog=document.getElementById('prog');
+const scenes=[...document.querySelectorAll('.scene')],sub=document.getElementById('sub');
 function render(t){{
  for(const s of scenes) s.style.opacity=(t>=+s.dataset.s-0.001&&t<+s.dataset.e)?1:0;
  for(const a of document.getAnimations()){{a.pause();a.currentTime=t*1000;}}
  const c=SUBS.find(x=>t>=x[0]&&t<x[1]); sub.style.display=c?'block':'none';
  if(c){{sub.textContent=c[2];sub.className='sub'+(/!$/.test(c[2])&&c[2].length<6?' em':'');}}
- prog.style.width=(t/TOTAL*100)+'%';
 }}
 </script></body></html>"""
     open(os.path.join(work, "short.html"), "w").write(html)
