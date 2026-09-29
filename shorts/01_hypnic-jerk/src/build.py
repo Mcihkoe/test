@@ -360,18 +360,18 @@ body{{width:{W}px;height:{H}px;background:#000;overflow:hidden;font-family:NSK,'
 <div class="title"><div class="l1">{TITLE[0]}</div><div class="l2">{TITLE[1]}</div></div>
 <div class="stage">{scenes_div}</div>
 <div class="sub" id="sub"></div>
-<div class="progress" id="prog"></div>
+
 <script>
 const SUBS={json.dumps(subs, ensure_ascii=False)}, TOTAL={TOTAL};
 const scenes=[...document.querySelectorAll('.scene')];
-const sub=document.getElementById('sub'), prog=document.getElementById('prog');
+const sub=document.getElementById('sub');
 function render(t){{
   for(const s of scenes) s.style.opacity=(t>=+s.dataset.s-0.001&&t<+s.dataset.e)?1:0;
   for(const a of document.getAnimations()){{a.pause();a.currentTime=t*1000;}}
   const cur=SUBS.find(x=>t>=x[0]&&t<x[1]);
   sub.style.display=cur?'block':'none';
   if(cur){{sub.textContent=cur[2];sub.className='sub'+(/!$/.test(cur[2])&&cur[2].length<5?' em':'');}}
-  prog.style.width=(t/TOTAL*100)+'%';
+  
 }}
 </script></body></html>"""
 open(os.path.join(OUT, "short.html"), "w").write(html)
