@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""Synthesize a jazzy instrumental BGM track (no external AI needed). v2
+"""Synthesize a jazzy instrumental BGM track (no external AI needed). v3
 
-Usage: python3 tools/gen_jazz_bgm.py OUT.wav [--bpm 92] [--seed 7] [--transpose 0]
+Usage: python3 tools/gen_jazz_bgm.py OUT.wav [--bpm 92] [--seed 7] [--transpose 0] [--comp piano|rhodes]
 
 Each seed picks a chord form and an arrangement:
   intro -> head (motif melody) -> vibes solo -> piano solo -> head out -> ending chord
-Layers (stereo): piano/e-piano comping, walking or two-feel bass, ride/hat/brush drums
-with fills, vibraphone lead, light vinyl crackle.
+Instruments are real sampled sounds (FluidR3_GM SoundFont via FluidSynth):
+Yamaha grand piano comping (or Rhodes with --comp rhodes), acoustic bass, vibraphone lead, brush drum kit.
+Requires: apt install fluidsynth fluid-soundfont-gm && pip install mido
 """
 import argparse
 import wave
 
 import numpy as np
-from scipy.signal import butter, fftconvolve, lfilter
 
 SR = 44100
 TRANSPOSE = 0
@@ -64,99 +64,102 @@ def fold(n, lo, hi):
     return n
 
 
-# ---------- instruments ----------
-def env_adsr(t, dur, a, decay):
-    e = np.exp(-decay * t) * np.minimum(1, t / a)
-    return e * np.clip((dur - t) / 0.06, 0, 1)
+# ---------- instruments (rendered from real sampled instruments via SoundFont) ----------
+SF2 = "/usr/share/sounds/sf2/FluidR3_GM.sf2"
+# name -> (GM program, MIDI velocity scale for the amplitude-style vel values below)
+PROGRAMS = {"piano": (0, 380), "epiano": (4, 420), "bass": (32, 180), "vibes": (11, 350)}
+CHANNEL_VOLUME = {"piano": 127, "epiano": 120, "bass": 90, "vibes": 120, "drum": 105}  # CC7 mix balance
+DRUM = {"kick": 36, "tap": 38, "swirl": 40, "pedal_hat": 44, "ride": 51}
 
 
 def piano(m, dur, vel):
-    t = np.arange(int((dur + 0.4) * SR)) / SR
-    f = hz(m)
-    s = np.zeros_like(t)
-    for k, amp in enumerate([1.0, 0.55, 0.3, 0.18, 0.1, 0.06], 1):
-        fk = f * k * np.sqrt(1 + 0.0004 * k * k)  # slight inharmonicity
-        s += amp * np.sin(2 * np.pi * fk * t) * np.exp(-(1.2 + 0.7 * k) * t)
-    s += 0.004 * np.random.standard_normal(len(t)) * np.exp(-80 * t)  # hammer
-    return s * env_adsr(t, dur + 0.4, 0.003, 0.9) * vel
+    return ("piano", m, dur, vel)
 
 
 def epiano(m, dur, vel):
-    t = np.arange(int((dur + 0.3) * SR)) / SR
-    f = hz(m)
-    s = np.sin(2 * np.pi * f * t + 1.4 * np.exp(-5 * t) * np.sin(2 * np.pi * f * t))
-    s += 0.2 * np.sin(2 * np.pi * f * 4 * t) * np.exp(-14 * t)
-    return s * env_adsr(t, dur + 0.3, 0.004, 1.8) * vel * (1 + 0.07 * np.sin(2 * np.pi * 4.6 * t))
+    return ("epiano", m, dur, vel)
 
 
 def bass(m, dur, vel):
-    t = np.arange(int(dur * SR)) / SR
-    f = hz(m)
-    s = np.sin(2 * np.pi * f * t) + 0.45 * np.sin(2 * np.pi * 2 * f * t) * np.exp(-6 * t)
-    s += 0.2 * np.sin(2 * np.pi * 3 * f * t) * np.exp(-10 * t)
-    s += 0.05 * np.random.standard_normal(len(t)) * np.exp(-200 * t)  # finger pluck
-    return np.tanh(1.3 * s) * env_adsr(t, dur, 0.004, 2.6) * vel
+    return ("bass", m, dur, vel)
 
 
 def vibes(m, dur, vel):
-    t = np.arange(int((dur + 0.5) * SR)) / SR
-    f = hz(m)
-    s = np.sin(2 * np.pi * f * t) + 0.25 * np.sin(2 * np.pi * 4 * f * t) * np.exp(-9 * t)
-    s += 0.08 * np.sin(2 * np.pi * 10 * f * t) * np.exp(-30 * t)
-    return s * env_adsr(t, dur + 0.5, 0.002, 1.4) * vel * (1 + 0.18 * np.sin(2 * np.pi * 5.2 * t))
+    return ("vibes", m, dur, vel)
 
 
-_hp = butter(2, 6500 / (SR / 2), btype="high")
-_hp2 = butter(2, 8000 / (SR / 2), btype="high")
-_bp = butter(2, [800 / (SR / 2), 5000 / (SR / 2)], btype="band")
-_sn = butter(2, [180 / (SR / 2), 7000 / (SR / 2)], btype="band")
+def drum(name, vel, dur=0.25):
+    return ("drum", DRUM[name], dur, vel)
 
 
-def noise_hit(rng, length, filt, decay, vel):
-    n = int(length * SR)
-    t = np.arange(n) / SR
-    return lfilter(*filt, rng.standard_normal(n)) * np.exp(-decay * t) * vel
-
-
-def kick(vel):
-    t = np.arange(int(0.2 * SR)) / SR
-    return np.sin(2 * np.pi * (52 + 45 * np.exp(-30 * t)) * t) * np.exp(-16 * t) * vel
-
-
-def snare(rng, vel):
-    t = np.arange(int(0.18 * SR)) / SR
-    body = np.sin(2 * np.pi * 190 * t) * np.exp(-30 * t) * 0.5
-    return (body + noise_hit(rng, 0.18, _sn, 22, 1.0)) * vel
-
-
-# ---------- stereo bus ----------
 class Bus:
-    def __init__(self, n):
-        self.l = np.zeros(n)
-        self.r = np.zeros(n)
+    """Collects note events; one MIDI channel per (bus, instrument)."""
 
-    def add(self, start, sig, pan=0.0):
-        i = int(max(start, 0) * SR)
-        if i >= len(self.l):
-            return
-        k = min(len(sig), len(self.l) - i)
-        gl, gr = np.cos((pan + 1) * np.pi / 4), np.sin((pan + 1) * np.pi / 4)
-        self.l[i : i + k] += sig[:k] * gl
-        self.r[i : i + k] += sig[:k] * gr
+    def __init__(self, name, events):
+        self.name = name
+        self.events = events
+
+    def add(self, start, note, pan=0.0):
+        self.events.append((self.name, max(start, 0.0), note, pan))
 
 
-def reverb(bus, rng, seconds=2.2, mix=0.3):
-    n = int(seconds * SR)
-    t = np.arange(n) / SR
-    lp = butter(1, 4500 / (SR / 2))
-    out = []
-    for ch in (bus.l, bus.r):
-        ir = lfilter(*lp, rng.standard_normal(n)) * np.exp(-3.0 * t)
-        ir[: int(0.02 * SR)] = 0  # pre-delay
-        wet = fftconvolve(ch, ir)[: len(ch)]
-        wet *= (np.std(ch) + 1e-9) / (np.std(wet) + 1e-9)
-        out.append(ch * (1 - mix) + wet * mix)
-    return out
+def write_midi(events, path, total):
+    import mido
+
+    tpq, tempo = 480, 500000  # 120 bpm grid; we place events in seconds
+    def tick(sec):
+        return int(round(sec * 1e6 / tempo * tpq))
+
+    mid = mido.MidiFile(ticks_per_beat=tpq)
+    track = mido.MidiTrack()
+    mid.tracks.append(track)
+    msgs = [(0, 0, mido.MetaMessage("set_tempo", tempo=tempo))]
+    chans, nxt = {}, 0
+    for bus, start, (inst, m, dur, vel), pan in events:
+        key = "drum" if inst == "drum" else (bus, inst)
+        if key not in chans:
+            if key == "drum":
+                ch = 9
+                msgs.append((0, 1, mido.Message("program_change", channel=9, program=40)))  # Brush kit
+                send = 30
+            else:
+                ch = nxt
+                nxt += 1 + (nxt + 1 == 9)
+                msgs.append((0, 1, mido.Message("program_change", channel=ch, program=PROGRAMS[inst][0])))
+                send = {"bass": 25}.get(inst, 55)
+            msgs.append((0, 1, mido.Message("control_change", channel=ch, control=10, value=int(64 + pan * 63))))
+            msgs.append((0, 1, mido.Message("control_change", channel=ch, control=91, value=send)))
+            msgs.append((0, 1, mido.Message("control_change", channel=ch, control=93, value=0)))
+            msgs.append((0, 1, mido.Message("control_change", channel=ch, control=7, value=CHANNEL_VOLUME[inst])))
+            chans[key] = ch
+        ch = chans[key]
+        if inst == "drum":
+            v, note = int(vel), m
+        else:
+            v, note = int(vel * PROGRAMS[inst][1]), m + TRANSPOSE
+        v = max(1, min(127, v))
+        on, off = tick(start), tick(start + dur)
+        msgs.append((on, 3, mido.Message("note_on", channel=ch, note=note, velocity=v)))
+        msgs.append((max(off, on + 1), 2, mido.Message("note_off", channel=ch, note=note, velocity=0)))
+    msgs.append((tick(total), 4, mido.MetaMessage("end_of_track")))
+    msgs.sort(key=lambda x: (x[0], x[1]))
+    last = 0
+    for t, _, msg in msgs:
+        track.append(msg.copy(time=t - last))
+        last = t
+    mid.save(path)
+
+
+def render(midi_path, wav_path):
+    import subprocess
+
+    subprocess.run(
+        ["fluidsynth", "-ni", "-q", "-g", "0.45", "-r", str(SR), "-O", "s16",
+         "-o", "synth.reverb.active=1", "-o", "synth.reverb.room-size=0.55",
+         "-o", "synth.reverb.damp=0.4", "-o", "synth.reverb.width=0.8", "-o", "synth.reverb.level=0.7",
+         "-o", "synth.chorus.active=0", "-F", wav_path, SF2, midi_path],
+        check=True,
+    )
 
 
 # ---------- composition ----------
@@ -206,6 +209,7 @@ def main():
     ap.add_argument("out")
     ap.add_argument("--bpm", type=float, default=92)
     ap.add_argument("--seed", type=int, default=7)
+    ap.add_argument("--comp", choices=["piano", "rhodes"], default="piano", help="comping instrument")
     ap.add_argument("--transpose", type=int, default=0, help="semitones, -3..3 keeps bass in range")
     a = ap.parse_args()
     global TRANSPOSE
@@ -217,7 +221,7 @@ def main():
     form = [parse_bar(b) for b in FORMS[form_name]]
     beat = 60.0 / a.bpm
     swing = 0.62 + 0.06 * rng.random()
-    comp_inst = piano if rng.random() < 0.5 else epiano
+    comp_inst = epiano if a.comp == "rhodes" else piano
 
     # arrangement: intro(2 bars) + sections, each one chorus of the form
     target_bars = int(150 / (4 * beat))  # aim ~2.5 min
@@ -229,7 +233,8 @@ def main():
     total = (len(bars) * 4 + 4) * beat + 4.0
     n = int(total * SR)
 
-    rhythm, lead, low, kit = Bus(n), Bus(n), Bus(n), Bus(n)
+    events = []
+    rhythm, lead, low, kit = (Bus(k, events) for k in ("rhythm", "lead", "low", "kit"))
 
     def jit():
         return rng.normal(0, 0.006)
@@ -278,20 +283,20 @@ def main():
         brushes = sec in ("intro", "head")
         for i in range(4):
             bt = t0 + i * beat
-            kit.add(bt + jit(), kick(0.10), 0.0)
+            kit.add(bt + jit(), drum("kick", rng.integers(28, 40)), 0.0)
             if brushes:
-                kit.add(bt, noise_hit(rng, beat * 0.9, _bp, 3.5, 0.035), -0.2)  # brush swish
-            kit.add(bt + jit(), noise_hit(rng, 0.4, _hp, 8, 0.11 if not brushes else 0.07), 0.45)  # ride
+                kit.add(bt, drum("swirl", rng.integers(35, 50), beat * 0.9), -0.2)  # brush swish
+            kit.add(bt + jit(), drum("ride", rng.integers(62, 76) if not brushes else rng.integers(45, 58)), 0.45)  # ride
             if i in (1, 3):
-                kit.add(bt + swing * beat + jit(), noise_hit(rng, 0.25, _hp, 12, 0.06), 0.45)
-                kit.add(bt + jit(), noise_hit(rng, 0.06, _hp2, 60, 0.08), -0.5)  # hat chick
+                kit.add(bt + swing * beat + jit(), drum("ride", rng.integers(38, 52)), 0.45)
+                kit.add(bt + jit(), drum("pedal_hat", rng.integers(50, 65)), -0.5)  # hat chick
                 if brushes:
-                    kit.add(bt + jit(), noise_hit(rng, 0.12, _bp, 25, 0.12), -0.1)
+                    kit.add(bt + jit(), drum("tap", rng.integers(45, 60)), -0.1)
             if not brushes and rng.random() < 0.12:
-                kit.add(bt + swing * beat, snare(rng, 0.05), -0.1)  # ghost note
+                kit.add(bt + swing * beat, drum("tap", rng.integers(22, 34)), -0.1)  # ghost note
         if last_bar_of_4 and bi % 8 == 7:
             for k in range(3):
-                kit.add(t0 + (3 + k / 3) * beat, snare(rng, 0.10 + 0.03 * k), -0.1)
+                kit.add(t0 + (3 + k / 3) * beat, drum("tap", 55 + 10 * k), -0.1)
 
         # melody
         root, q = chords[0]
@@ -330,26 +335,33 @@ def main():
         rhythm.add(tend + k * 0.05, piano(m, 3.0, 0.14), -0.35)
     low.add(tend, bass(fold(36 + root, 36, 48), 3.0, 0.45), 0.0)
     lead.add(tend + 0.2, vibes(fold(72 + root + 7, 70, 84), 3.0, 0.15), 0.35)
-    kit.add(tend, noise_hit(rng, 2.5, _hp, 1.5, 0.12), 0.45)
+    kit.add(tend, drum("ride", 70, 3.0), 0.45)
 
-    # mix
-    melodic = Bus(n)
-    melodic.l = rhythm.l + lead.l
-    melodic.r = rhythm.r + lead.r
-    ml, mr = reverb(melodic, rng, mix=0.32)
-    kl, kr = reverb(kit, rng, seconds=1.2, mix=0.15)
-    L = ml + kl + low.l * 1.0
-    R = mr + kr + low.r * 1.0
+    # render real instruments, then master
+    import os
+    import tempfile
+
+    tmpd = tempfile.mkdtemp()
+    mid_path, raw_path = os.path.join(tmpd, "song.mid"), os.path.join(tmpd, "raw.wav")
+    write_midi(events, mid_path, total)
+    render(mid_path, raw_path)
+    with wave.open(raw_path, "rb") as w:
+        raw = np.frombuffer(w.readframes(w.getnframes()), dtype="<i2").astype(np.float64) / 32768
+    os.remove(mid_path)
+    os.remove(raw_path)
+    os.rmdir(tmpd)
+    stereo = raw.reshape(-1, 2).T[:, :n]
+    if stereo.shape[1] < n:
+        stereo = np.pad(stereo, ((0, 0), (0, n - stereo.shape[1])))
+
     crack = np.zeros(n)
-    for _ in range(int(total * 5)):
+    for _ in range(int(total * 4)):
         i = int(rng.random() * (n - 100))
-        crack[i : i + 60] += rng.standard_normal(60) * np.exp(-np.arange(60) / 10) * 0.015
-    L, R = L + crack, R + crack * 0.8
+        crack[i : i + 60] += rng.standard_normal(60) * np.exp(-np.arange(60) / 10) * 0.004
+    stereo = stereo + np.stack([crack, crack * 0.8])
 
-    stereo = np.stack([L, R])
-    stereo = lfilter(*butter(2, 11000 / (SR / 2)), stereo, axis=1)
     stereo /= np.max(np.abs(stereo)) + 1e-9
-    stereo = np.tanh(1.6 * stereo) / np.tanh(1.6)  # warm saturation / glue
+    stereo = np.tanh(1.15 * stereo) / np.tanh(1.15)  # gentle glue
     fade_in = int(0.5 * SR)
     stereo[:, :fade_in] *= np.linspace(0, 1, fade_in)
     fade_out = int(2.5 * SR)
