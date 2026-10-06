@@ -1,18 +1,24 @@
 #!/usr/bin/env python3
-"""Synthesize a jazzy instrumental BGM track (no external AI needed). v3
+"""Synthesize a jazzy instrumental BGM track (no external AI needed). v4
 
 Usage: python3 tools/gen_jazz_bgm.py OUT.wav [--bpm 92] [--seed 7] [--transpose 0] [--comp piano|rhodes]
 
 Each seed picks a chord form and an arrangement:
-  intro -> head (motif melody) -> vibes solo -> piano solo -> head out -> ending chord
-Instruments are real sampled sounds (FluidR3_GM SoundFont via FluidSynth):
-Yamaha grand piano comping (or Rhodes with --comp rhodes), acoustic bass, vibraphone lead, brush drum kit.
-Requires: apt install fluidsynth fluid-soundfont-gm && pip install mido
+  intro -> head (motif melody) -> piano solo choruses -> head out -> ending chord
+Piano trio, all real sampled instruments:
+  piano  - Salamander Grand Piano V3 (Yamaha C5, CC BY 3.0, Alexander Holm), 8 velocity layers
+           + key-release samples; fetch with tools/fetch_piano_samples.sh
+  bass, brush drums - FluidR3_GM SoundFont via FluidSynth
+Requires: apt install fluidsynth fluid-soundfont-gm && pip install mido scipy
 """
 import argparse
+import os
+import re
+import subprocess
 import wave
 
 import numpy as np
+from scipy.signal import butter, fftconvolve, lfilter
 
 SR = 44100
 TRANSPOSE = 0
@@ -67,8 +73,8 @@ def fold(n, lo, hi):
 # ---------- instruments (rendered from real sampled instruments via SoundFont) ----------
 SF2 = "/usr/share/sounds/sf2/FluidR3_GM.sf2"
 # name -> (GM program, MIDI velocity scale for the amplitude-style vel values below)
-PROGRAMS = {"piano": (0, 380), "epiano": (4, 420), "bass": (32, 180), "vibes": (11, 350)}
-CHANNEL_VOLUME = {"piano": 127, "epiano": 120, "bass": 90, "vibes": 120, "drum": 105}  # CC7 mix balance
+PROGRAMS = {"piano": (0, 380), "epiano": (4, 420), "bass": (32, 180)}
+CHANNEL_VOLUME = {"piano": 127, "epiano": 120, "bass": 90, "drum": 92}  # CC7 mix balance
 DRUM = {"kick": 36, "tap": 38, "swirl": 40, "pedal_hat": 44, "ride": 51}
 
 
@@ -82,10 +88,6 @@ def epiano(m, dur, vel):
 
 def bass(m, dur, vel):
     return ("bass", m, dur, vel)
-
-
-def vibes(m, dur, vel):
-    return ("vibes", m, dur, vel)
 
 
 def drum(name, vel, dur=0.25):
@@ -162,6 +164,82 @@ def render(midi_path, wav_path):
     )
 
 
+# ---------- Salamander grand piano sampler ----------
+PIANO_DIR = os.path.expanduser(os.environ.get("PIANO_SAMPLES", "~/.cache/jazz-bgm/salamander"))
+NOTE_NAMES = {"C": 0, "C#": 1, "D": 2, "D#": 3, "E": 4, "F": 5, "F#": 6, "G": 7, "G#": 8, "A": 9, "A#": 10, "B": 11}
+_cache = {}
+
+
+def _decode(path, max_sec=9.0):
+    if path not in _cache:
+        raw = subprocess.run(
+            ["ffmpeg", "-v", "error", "-i", path, "-t", str(max_sec), "-f", "f32le", "-ac", "2", "-ar", str(SR), "-"],
+            check=True, capture_output=True,
+        ).stdout
+        _cache[path] = np.frombuffer(raw, dtype="<f4").reshape(-1, 2).T.astype(np.float64)
+    return _cache[path]
+
+
+def piano_bank():
+    """{layer: {midi_note: path}} from files like 'D#4v12.ogg'."""
+    bank = {}
+    if not os.path.isdir(PIANO_DIR):
+        return bank
+    for f in os.listdir(PIANO_DIR):
+        m = re.match(r"^([A-G]#?)(\d)v(\d+)\.ogg$", f)
+        if m:
+            midi = 12 * (int(m.group(2)) + 1) + NOTE_NAMES[m.group(1)]
+            bank.setdefault(int(m.group(3)), {})[midi] = os.path.join(PIANO_DIR, f)
+    return bank
+
+
+def render_piano(events, n, bank):
+    out = np.zeros((2, n))
+    layers = sorted(bank)
+    for start, note, dur, vel, pan in events:
+        layer = min(layers, key=lambda L: abs(L - vel / 127 * 16))
+        notes = bank[layer]
+        src_note = min(notes, key=lambda k: (abs(k - note), k))
+        smp = _decode(notes[src_note])
+        ratio = 2 ** ((note - src_note) / 12)
+        rel = 0.35
+        length = int((dur + rel) * SR)
+        pos = np.arange(length) * ratio
+        pos = pos[pos < smp.shape[1] - 1]
+        sig = np.stack([np.interp(pos, np.arange(smp.shape[1]), ch) for ch in smp])
+        t = np.arange(sig.shape[1]) / SR
+        env = np.where(t < dur, 1.0, np.exp(-(t - dur) / 0.09))  # damper
+        gain = np.clip(vel / (layer / 16 * 127), 0.75, 1.3)
+        sig *= env * gain
+        sig *= np.array([[np.cos((pan + 1) * np.pi / 4)], [np.sin((pan + 1) * np.pi / 4)]]) * np.sqrt(2)
+        i = int(start * SR)
+        k = min(sig.shape[1], n - i)
+        if k > 0:
+            out[:, i : i + k] += sig[:, :k]
+        relf = os.path.join(PIANO_DIR, f"rel{note - 20}.ogg")
+        if os.path.exists(relf) and 21 <= note <= 108:
+            r = _decode(relf, 1.0) * 0.5 * (vel / 127)
+            j = int((start + dur) * SR)
+            k = min(r.shape[1], n - j)
+            if k > 0:
+                out[:, j : j + k] += r[:, :k]
+    return out
+
+
+def room(st, rng, seconds=1.6, mix=0.2):
+    m = int(seconds * SR)
+    t = np.arange(m) / SR
+    lp = butter(1, 5000 / (SR / 2))
+    res = []
+    for ch in st:
+        ir = lfilter(*lp, rng.standard_normal(m)) * np.exp(-3.8 * t)
+        ir[: int(0.015 * SR)] = 0
+        wet = fftconvolve(ch, ir)[: len(ch)]
+        wet *= (np.std(ch) + 1e-9) / (np.std(wet) + 1e-9)
+        res.append(ch * (1 - mix) + wet * mix)
+    return np.stack(res)
+
+
 # ---------- composition ----------
 def voicing(root, q, prev):
     iv = QUALITY[q][0]
@@ -226,7 +304,7 @@ def main():
     # arrangement: intro(2 bars) + sections, each one chorus of the form
     target_bars = int(150 / (4 * beat))  # aim ~2.5 min
     n_ch = max(3, round(target_bars / len(form)))
-    sections = ["head"] + ["vibes", "piano", "vibes"][: n_ch - 2] + ["head"]
+    sections = ["head"] + ["piano"] * min(2, n_ch - 2) + ["head"]
     bars = [("intro", form[-2])] + [("intro", form[-1])]
     for s in sections:
         bars += [(s, b) for b in form]
@@ -309,9 +387,9 @@ def main():
                     croot, cq = bars[min(bi + bar_off, len(bars) - 1)][1][0]
                     m = snap(base + step, croot, cq, abs(pos - round(pos)) < 1e-6)
                     m = fold(m, 64, 86)
-                    lead.add(t0 + pos * beat + jit(), vibes(m, ln * beat * 1.2, 0.2 * rng.uniform(0.85, 1.1)), 0.35)
-        elif sec in ("vibes", "piano") and bi % 4 != 3:
-            inst, pan, vel = (vibes, 0.35, 0.18) if sec == "vibes" else (piano, -0.15, 0.2)
+                    lead.add(t0 + pos * beat + jit(), piano(m, ln * beat * 1.1, 0.21 * rng.uniform(0.85, 1.1)), -0.1)
+        elif sec == "piano" and bi % 4 != 3:
+            inst, pan, vel = piano, -0.1, 0.2
             cur = prev_note
             pos = 0.0
             while pos < 4.0:
@@ -328,13 +406,13 @@ def main():
                 pos += ln
             prev_note = cur
 
-    # ending: tonic chord + bass + vibes ring out
+    # ending: tonic chord + bass + high piano note ring out
     tend = len(bars) * 4 * beat
     root, q = form[0][0] if form_name != "rhythm" else (0, "6/9")
     for k, m in enumerate(voicing(root, "6/9" if q in ("maj9", "13", "6/9") else q, prev_voic)):
         rhythm.add(tend + k * 0.05, piano(m, 3.0, 0.14), -0.35)
     low.add(tend, bass(fold(36 + root, 36, 48), 3.0, 0.45), 0.0)
-    lead.add(tend + 0.2, vibes(fold(72 + root + 7, 70, 84), 3.0, 0.15), 0.35)
+    lead.add(tend + 0.25, piano(fold(72 + root + 7, 70, 84), 3.0, 0.13), -0.1)
     kit.add(tend, drum("ride", 70, 3.0), 0.45)
 
     # render real instruments, then master
@@ -343,7 +421,9 @@ def main():
 
     tmpd = tempfile.mkdtemp()
     mid_path, raw_path = os.path.join(tmpd, "song.mid"), os.path.join(tmpd, "raw.wav")
-    write_midi(events, mid_path, total)
+    bank = piano_bank()
+    piano_ev = [e for e in events if e[2][0] == "piano"] if bank else []
+    write_midi([e for e in events if not (bank and e[2][0] == "piano")], mid_path, total)
     render(mid_path, raw_path)
     with wave.open(raw_path, "rb") as w:
         raw = np.frombuffer(w.readframes(w.getnframes()), dtype="<i2").astype(np.float64) / 32768
@@ -353,6 +433,17 @@ def main():
     stereo = raw.reshape(-1, 2).T[:, :n]
     if stereo.shape[1] < n:
         stereo = np.pad(stereo, ((0, 0), (0, n - stereo.shape[1])))
+    if bank:
+        pno = render_piano(
+            [(st, m + TRANSPOSE, d, max(1, min(127, v * PROGRAMS["piano"][1])), pan) for _, st, (_, m, d, v), pan in piano_ev],
+            n, bank,
+        )
+        pno = room(pno, rng)
+        # mix balance: piano sits ~3 dB under the bass+drums render
+        pno *= 0.7 * (np.sqrt(np.mean(stereo ** 2)) + 1e-9) / (np.sqrt(np.mean(pno ** 2)) + 1e-9)
+        stereo = stereo + pno
+    else:
+        print("warning: Salamander samples not found; using SoundFont piano (run tools/fetch_piano_samples.sh)")
 
     crack = np.zeros(n)
     for _ in range(int(total * 4)):
