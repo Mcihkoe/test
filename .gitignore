@@ -4,3 +4,4 @@ output/*.wav
 output/mix.log
 !output/ny_afternoon_jazz_demo.mp4
 !output/ny_afternoon_jazz.mp3
+__pycache__/
