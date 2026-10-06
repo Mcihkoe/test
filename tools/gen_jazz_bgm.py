@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Synthesize a short, jazzy instrumental BGM loop (no external AI needed).
 
-Usage: python3 tools/gen_jazz_bgm.py OUT.wav [--bpm 92] [--seed 7]
+Usage: python3 tools/gen_jazz_bgm.py OUT.wav [--bpm 92] [--seed 7] [--transpose 0]
 Layers: electric-piano comping, walking bass, brush drums, vibraphone melody.
 """
 import argparse
@@ -11,6 +11,7 @@ import numpy as np
 from scipy.signal import butter, fftconvolve, lfilter
 
 SR = 44100
+TRANSPOSE = 0
 
 # name: (bass root, comp voicing, chord tones for melody, scale pitch classes)
 CHORDS = {
@@ -32,7 +33,7 @@ CHORUSES = 4
 
 
 def hz(m):
-    return 440.0 * 2 ** ((m - 69) / 12)
+    return 440.0 * 2 ** ((m + TRANSPOSE - 69) / 12)
 
 
 def add(buf, start, sig):
@@ -118,7 +119,10 @@ def main():
     ap.add_argument("out")
     ap.add_argument("--bpm", type=float, default=92)
     ap.add_argument("--seed", type=int, default=7)
+    ap.add_argument("--transpose", type=int, default=0, help="semitones, -3..3 keeps bass in range")
     a = ap.parse_args()
+    global TRANSPOSE
+    TRANSPOSE = a.transpose
     rng = np.random.default_rng(a.seed)
     beat = 60.0 / a.bpm
     swing = 2 / 3  # position of the off-beat eighth inside a beat
