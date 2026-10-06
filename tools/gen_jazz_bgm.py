@@ -7,7 +7,7 @@ Each seed picks a chord form and an arrangement:
   intro -> head (motif melody) -> piano solo choruses -> head out -> ending chord
 Piano trio, all real sampled instruments:
   piano  - Salamander Grand Piano V3 (Yamaha C5, CC BY 3.0, Alexander Holm), 8 velocity layers
-           + key-release samples; fetch with tools/fetch_piano_samples.sh
+           (soft layers, hammer noise trimmed/softened); fetch with tools/fetch_piano_samples.sh
   bass, brush drums - FluidR3_GM SoundFont via FluidSynth
 Requires: apt install fluidsynth fluid-soundfont-gm && pip install mido scipy
 """
@@ -18,7 +18,7 @@ import subprocess
 import wave
 
 import numpy as np
-from scipy.signal import butter, fftconvolve, lfilter
+from scipy.signal import butter, fftconvolve, lfilter, sosfiltfilt
 
 SR = 44100
 TRANSPOSE = 0
@@ -193,14 +193,39 @@ def piano_bank():
     return bank
 
 
+MAX_LAYER = 10  # softer layers only: higher ones carry much more hammer noise
+_lp_attack = butter(2, 3000 / (SR / 2), output="sos")
+
+
+def _trimmed(path):
+    """Sample with the mechanical lead-in (key/hammer noise before the tone) removed."""
+    key = ("trim", path)
+    if key not in _cache:
+        smp = _decode(path)
+        mono = np.abs(smp).mean(0)
+        on = int(np.argmax(mono > 0.02 * mono.max()))
+        smp = smp[:, max(0, on - int(0.001 * SR)) :].copy()
+        fade = int(0.003 * SR)
+        smp[:, :fade] *= np.linspace(0, 1, fade)
+        # soften the hammer transient: high band ramps in over 70 ms
+        low = sosfiltfilt(_lp_attack, smp, axis=1)
+        high = smp - low
+        ramp = np.ones(smp.shape[1])
+        k = int(0.07 * SR)
+        ramp[:k] = np.linspace(0.1, 1.0, k) ** 1.5
+        _cache[key] = low + high * ramp
+    return _cache[key]
+
+
 def render_piano(events, n, bank):
     out = np.zeros((2, n))
-    layers = sorted(bank)
+    layers = [L for L in sorted(bank) if L <= MAX_LAYER] or sorted(bank)
     for start, note, dur, vel, pan in events:
-        layer = min(layers, key=lambda L: abs(L - vel / 127 * 16))
+        want = vel / 127 * 16 * MAX_LAYER / 16
+        layer = min(layers, key=lambda L: abs(L - want))
         notes = bank[layer]
         src_note = min(notes, key=lambda k: (abs(k - note), k))
-        smp = _decode(notes[src_note])
+        smp = _trimmed(notes[src_note])
         ratio = 2 ** ((note - src_note) / 12)
         rel = 0.35
         length = int((dur + rel) * SR)
@@ -209,21 +234,15 @@ def render_piano(events, n, bank):
         sig = np.stack([np.interp(pos, np.arange(smp.shape[1]), ch) for ch in smp])
         t = np.arange(sig.shape[1]) / SR
         env = np.where(t < dur, 1.0, np.exp(-(t - dur) / 0.09))  # damper
-        gain = np.clip(vel / (layer / 16 * 127), 0.75, 1.3)
-        sig *= env * gain
+        gain = (vel / 100) ** 1.6 / (layer / MAX_LAYER) ** 1.2  # dynamics without hard layers
+        sig *= env * np.clip(gain, 0.3, 2.0)
         sig *= np.array([[np.cos((pan + 1) * np.pi / 4)], [np.sin((pan + 1) * np.pi / 4)]]) * np.sqrt(2)
         i = int(start * SR)
         k = min(sig.shape[1], n - i)
         if k > 0:
             out[:, i : i + k] += sig[:, :k]
-        relf = os.path.join(PIANO_DIR, f"rel{note - 20}.ogg")
-        if os.path.exists(relf) and 21 <= note <= 108:
-            r = _decode(relf, 1.0) * 0.5 * (vel / 127)
-            j = int((start + dur) * SR)
-            k = min(r.shape[1], n - j)
-            if k > 0:
-                out[:, j : j + k] += r[:, :k]
-    return out
+    # gentle top-end roll-off keeps residual key noise out of the mix
+    return sosfiltfilt(butter(2, 7500 / (SR / 2), output="sos"), out, axis=1)
 
 
 def room(st, rng, seconds=1.6, mix=0.2):
