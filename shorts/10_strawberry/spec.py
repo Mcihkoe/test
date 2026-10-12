@@ -8,10 +8,13 @@ ACCENT = "#ff1744"
 TITLE = ["딸기에 박힌 점들", "씨가 아니었다"]
 YT_TITLE = "딸기 겉에 박힌 게 씨가 아니라고? ㄷㄷ"
 DESCRIPTION = """
-딸기 겉의 작은 점들, 사실 씨가 아니라 하나하나가 진짜 열매 🍓
-식물학적으로 딸기는 베리가 아니고, 오히려 바나나가 베리라는 사실까지!
+딸기 겉에 박힌 점, 씨가 아니었다 🍓
+그 작은 점 하나하나가 사실 진짜 열매! 우리가 먹는 빨간 부분은 꽃턱이 부풀어 오른 것.
+식물학적으로 딸기는 베리가 아니고, 오히려 바나나가 베리라는 사실까지.
 """
 TAGS = ["딸기", "딸기씨", "식물학", "베리", "음식상식", "식재료", "잡학", "쇼츠", "shorts"]
+QUESTION = '이거 원래 알고 있었던 사람? 🙋'
+HASHTAGS = ['딸기', '딸기씨', '식물상식', '음식상식']
 THUMB_CUE = (0, "0.2")
 
 STYLE = "photorealistic, macro food photography, studio lighting, square composition, no text, no watermark"

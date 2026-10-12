@@ -8,10 +8,13 @@ ACCENT = "#ffca28"
 TITLE = ["흰 달걀 vs 갈색 달걀", "뭐가 더 좋을까?"]
 YT_TITLE = "흰 달걀이랑 갈색 달걀, 영양 차이 있을까? ㄷㄷ"
 DESCRIPTION = """
-흰 달걀과 갈색 달걀, 영양은 똑같다 🥚
-껍데기 색은 닭 품종이, 노른자 색은 사료가 정한다는 사실!
+흰 달걀 vs 갈색 달걀, 영양 차이 있을까? 🥚
+정답은 똑같다! 껍데기 색은 닭 품종이, 노른자 색은 사료가 정한다.
+닭 귓불 색으로 알 색을 짐작하는 방법까지.
 """
 TAGS = ["달걀", "계란", "갈색달걀", "흰달걀", "노른자", "음식상식", "식재료", "잡학", "쇼츠", "shorts"]
+QUESTION = '달걀은 반숙 vs 완숙?'
+HASHTAGS = ['달걀', '계란', '갈색달걀', '음식상식']
 THUMB_CUE = (0, "0.1")
 
 STYLE = "photorealistic, natural light, food photography, square composition, no text, no watermark"

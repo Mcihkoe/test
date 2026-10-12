@@ -8,10 +8,13 @@ ACCENT = "#ff1744"
 TITLE = ["옛날 수박은", "빨간색이 아니었다"]
 YT_TITLE = "옛날 수박 속은 하얬다고? ㄷㄷ"
 DESCRIPTION = """
-여름 필수템 수박, 옛날엔 속이 거의 하얗고 빨간 부분은 조금뿐이었다 🍉
+옛날 수박은 속이 하얬다 🍉
+지금처럼 새빨간 수박이 아니라, 빨간 부분은 조금뿐이었다고?
 이집트 무덤 속 수박 씨부터 17세기 그림 속 수박, 씨 없는 수박의 비밀까지!
 """
 TAGS = ["수박", "수박유래", "씨없는수박", "음식유래", "식재료", "잡학", "쇼츠", "shorts"]
+QUESTION = '수박 씨, 뱉는 파 vs 그냥 먹는 파?'
+HASHTAGS = ['수박', '수박유래', '씨없는수박', '음식유래']
 THUMB_CUE = (3, "0.2")
 
 STYLE = "photorealistic, cinematic lighting, documentary photo, square composition, no text, no watermark"

@@ -8,10 +8,13 @@ ACCENT = "#ce93d8"
 TITLE = ["고구마는 뿌리", "감자는 줄기?"]
 YT_TITLE = "고구마랑 감자, 먹는 부위가 완전 다르다고? ㄷㄷ"
 DESCRIPTION = """
-고구마는 뿌리, 감자는 땅속 줄기 🍠🥔
-그리고 굶주린 백성을 살리려 고구마를 조선에 들여온 통신사 조엄 이야기까지!
+고구마는 뿌리, 감자는 줄기 🍠🥔
+비슷해 보여도 먹는 부위가 완전 다르다! 감자 '눈'에서 싹이 나는 이유도 이것.
+굶주린 백성을 살리려 고구마를 조선에 들여온 통신사 조엄 이야기까지.
 """
 TAGS = ["고구마", "감자", "조엄", "고구마유래", "음식유래", "식재료", "역사", "잡학", "쇼츠", "shorts"]
+QUESTION = '고구마는 호박고구마 vs 밤고구마?'
+HASHTAGS = ['고구마', '감자', '조엄', '음식유래']
 THUMB_CUE = (1, "0.1")
 
 STYLE = "3D animated cartoon style like a Pixar film, vibrant colors, square composition, no text, no watermark"

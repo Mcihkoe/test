@@ -8,10 +8,13 @@ ACCENT = "#ff5252"
 TITLE = ["뒷마당 창고에서", "탄생한 라면"]
 YT_TITLE = "라면이 뒷마당 창고에서 탄생했다고? ㄷㄷ"
 DESCRIPTION = """
-3분이면 끝나는 인스턴트 라면, 48살 아저씨가 뒷마당 창고에서 1년 동안 매달려 만든 발명품 🍜
-아내의 튀김에서 찾은 비밀, 면을 기름에 튀겨 말리는 방법!
+인스턴트 라면은 뒷마당 창고에서 탄생했다 🍜
+48살 안도 모모후쿠가 창고에서 1년 동안 매달려 만든 발명품.
+아내의 튀김에서 찾은 비밀, 면을 기름에 튀겨 말리는 방법! 라면 유래 40초 정리.
 """
 TAGS = ["라면", "라면유래", "인스턴트라면", "안도모모후쿠", "음식유래", "발명", "잡학", "쇼츠", "shorts"]
+QUESTION = '라면 끓일 때 나만의 비법 있음? 🍳'
+HASHTAGS = ['라면', '라면유래', '안도모모후쿠', '음식유래']
 THUMB_CUE = (3, "0.2")
 
 STYLE = "3D animated cartoon style like a Pixar film, vibrant colors, square composition, no text, no watermark"

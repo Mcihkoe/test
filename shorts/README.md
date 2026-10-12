@@ -29,7 +29,7 @@
 - `short.mp4`: 바로 업로드 가능한 완성본 (1080×1920, 30fps, -14 LUFS 음량 정규화)
 - `short_no-narration.mp4`: 내레이션만 뺀 버전 (다른 목소리로 더빙할 때)
 - `thumbnail.jpg`: 커버로 고를 프레임
-- `upload.txt`: 제목, 설명, 해시태그, 태그
+- `upload.txt`: 제목, 설명(검색 키워드 첫 줄 + 댓글 질문 + 시리즈 소개), 해시태그 5개, 태그. `spec.py`만 고쳤다면 `python3 shorts/engine/engine.py shorts/NN_x --upload-only`로 다시 생성
 - `subtitles.srt`: 자막 타이밍
 - `spec.py`: 대본, 장면 구성, 효과음 설계
 - `images/` (05~20): Canva AI로 생성한 장면 이미지 (1080×1080)

@@ -8,10 +8,13 @@ ACCENT = "#ff9e40"
 TITLE = ["달콤한 초콜릿의", "매운 과거"]
 YT_TITLE = "초콜릿이 원래 쓰고 매운 음료였다고? ㄷㄷ"
 DESCRIPTION = """
-달콤한 초콜릿, 원래는 고추를 넣은 쓰고 매운 음료였다 🍫🌶️
-카카오 콩이 돈으로 쓰이던 아즈텍부터 초콜릿 바가 탄생하기까지!
+초콜릿은 원래 달콤한 간식이 아니었다 🍫🌶️
+아즈텍에선 카카오에 고추를 넣은 쓰고 매운 음료였고, 카카오 콩은 돈으로도 쓰였다?
+설탕을 만나 유럽 귀족을 사로잡고, 초콜릿 바가 탄생하기까지!
 """
 TAGS = ["초콜릿", "초콜릿유래", "카카오", "아즈텍", "음식유래", "식재료", "잡학", "쇼츠", "shorts"]
+QUESTION = '초콜릿은 밀크 vs 다크, 뭐 좋아함?'
+HASHTAGS = ['초콜릿', '초콜릿유래', '카카오', '음식유래']
 THUMB_CUE = (1, "0.2")
 
 STYLE = "photorealistic, cinematic lighting, documentary photo, square composition, no text, no watermark"

@@ -8,10 +8,13 @@ ACCENT = "#b388ff"
 TITLE = ["버섯은 식물보다", "동물에 더 가깝다"]
 YT_TITLE = "버섯이 식물보다 동물에 가깝다고? ㄷㄷ"
 DESCRIPTION = """
-채소 코너에 있지만 식물이 아닌 버섯 🍄
-곤충 껍데기와 같은 성분 키틴, 그리고 세계에서 가장 큰 생물이 버섯이라는 사실까지!
+버섯은 식물이 아니다, 오히려 동물에 더 가깝다 🍄
+버섯 세포벽은 곤충 껍데기와 같은 성분 '키틴'! 광합성도 못 하고 분해해서 영양분을 얻는다.
+세계에서 가장 큰 생물도 버섯 종류라는 사실까지.
 """
 TAGS = ["버섯", "균류", "키틴", "뽕나무버섯", "생물상식", "식재료", "잡학", "쇼츠", "shorts"]
+QUESTION = '제일 좋아하는 버섯은? 🍄'
+HASHTAGS = ['버섯', '균류', '키틴', '생물상식']
 THUMB_CUE = (1, "0.1")
 
 STYLE = "photorealistic, natural light, documentary photo, square composition, no text, no watermark"

@@ -391,11 +391,35 @@ function render(t){{
     with open(os.path.join(short_dir, "subtitles.srt"), "w") as f:
         for i, (a, b, c) in enumerate(subs, 1):
             f.write(f"{i}\n{ts(a)} --> {ts(b)}\n{c}\n\n")
-    with open(os.path.join(short_dir, "upload.txt"), "w") as f:
-        f.write(f"[제목]\n{spec.YT_TITLE}\n\n[설명]\n{spec.DESCRIPTION.strip()}\n\n{' '.join('#' + x for x in spec.TAGS)}\n\n"
-                f"[태그]\n{', '.join(spec.TAGS)}\n\n[길이] {total:.1f}초 · 1080x1920 · 30fps\n")
+    write_upload(short_dir, spec, total)
     print("done", short_dir, round(total, 2))
 
 
+SERIES_LINE = "{series} | 매일 먹는 음식에 숨은 의외의 이야기\n👉 구독하고 다음 이야기도 받아보세요"
+
+
+def write_upload(short_dir, spec, total):
+    # Description layout: keyword hook + facts, comment question, series line, 5 focused hashtags
+    desc = spec.DESCRIPTION.strip()
+    if getattr(spec, "QUESTION", None):
+        desc += f"\n\n💬 {spec.QUESTION}"
+    desc += "\n\n" + SERIES_LINE.format(series=spec.SERIES)
+    hashtags = list(getattr(spec, "HASHTAGS", spec.TAGS[:4])) + ["shorts"]
+    with open(os.path.join(short_dir, "upload.txt"), "w") as f:
+        f.write(f"[제목]\n{spec.YT_TITLE}\n\n[설명]\n{desc}\n\n{' '.join('#' + x for x in hashtags)}\n\n"
+                f"[태그]\n{', '.join(spec.TAGS)}\n\n[길이] {total:.1f}초 · 1080x1920 · 30fps\n")
+
+
+def upload_only(short_dir):
+    # Rewrite upload.txt from spec.py without re-rendering (duration read from short.mp4)
+    spec = load_spec(short_dir)
+    out = subprocess.run([FFMPEG, "-i", os.path.join(short_dir, "short.mp4")], capture_output=True, text=True).stderr
+    h, m, sec = re.search(r"Duration: (\d+):(\d+):([\d.]+)", out).groups()
+    write_upload(short_dir, spec, int(h) * 3600 + int(m) * 60 + float(sec))
+
+
 if __name__ == "__main__":
-    build(sys.argv[1], preview="--preview" in sys.argv)
+    if "--upload-only" in sys.argv:
+        upload_only(sys.argv[1])
+    else:
+        build(sys.argv[1], preview="--preview" in sys.argv)

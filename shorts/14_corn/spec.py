@@ -8,10 +8,13 @@ ACCENT = "#ffd600"
 TITLE = ["옥수수의 조상은", "알갱이가 5개?"]
 YT_TITLE = "옥수수 조상은 알갱이가 겨우 5개였다고? ㄷㄷ"
 DESCRIPTION = """
-지금은 알갱이 수백 개짜리 옥수수, 조상 '테오신트'는 알갱이가 겨우 5~12개였다 🌽
-9000년 전 멕시코에서 시작된 인류 최고의 품종개량 이야기!
+옥수수 조상은 알갱이가 겨우 5~12개였다 🌽
+멕시코의 잡초 같은 풀 '테오신트'가 어떻게 알갱이 수백 개짜리 옥수수가 됐을까?
+9000년 전부터 이어진 인류 최고의 품종개량 이야기!
 """
 TAGS = ["옥수수", "테오신트", "옥수수유래", "품종개량", "음식유래", "식재료", "잡학", "쇼츠", "shorts"]
+QUESTION = '옥수수는 찰옥수수 vs 초당옥수수?'
+HASHTAGS = ['옥수수', '테오신트', '옥수수유래', '품종개량']
 THUMB_CUE = (2, "0.1")
 
 STYLE = "photorealistic, cinematic lighting, documentary photo, square composition, no text, no watermark"

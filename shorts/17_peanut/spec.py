@@ -8,10 +8,13 @@ ACCENT = "#ffb74d"
 TITLE = ["땅콩은 꽃이 피면", "땅속으로 숨는다"]
 YT_TITLE = "땅콩이 땅속에서 열리는 신기한 방법 ㄷㄷ"
 DESCRIPTION = """
-땅콩은 견과류가 아니라 콩과 식물 🥜
-땅 위에서 꽃이 피고, 줄기가 땅속으로 파고 들어가 열매를 맺는 신기한 식물!
+땅콩은 땅속에서 열린다, 그런데 방법이 신기하다 🥜
+견과류가 아니라 콩과 식물인 땅콩. 꽃은 땅 위에서 피고, 줄기가 땅속으로 파고들어 열매를 맺는다!
+남아메리카에서 수천 년 전부터 키운 땅콩 이야기.
 """
 TAGS = ["땅콩", "땅콩재배", "콩과식물", "식물상식", "식재료", "잡학", "쇼츠", "shorts"]
+QUESTION = '땅콩버터 vs 볶은 땅콩, 뭐 좋아함? 🥜'
+HASHTAGS = ['땅콩', '땅콩재배', '식물상식', '음식상식']
 THUMB_CUE = (3, "0.2")
 
 STYLE = "photorealistic, natural light, documentary photo, square composition, no text, no watermark"

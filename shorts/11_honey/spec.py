@@ -8,11 +8,14 @@ ACCENT = "#ffb300"
 TITLE = ["수천 년이 지나도", "안 썩는 음식"]
 YT_TITLE = "수천 년 된 꿀도 안 썩는 이유 ㄷㄷ"
 DESCRIPTION = """
-고대 이집트 무덤에서 나온 수천 년 된 꿀단지 🍯
-꿀이 안 썩는 과학적인 이유와, 꿀벌 한 마리가 평생 모으는 꿀의 양까지!
+꿀은 수천 년이 지나도 썩지 않는다 🍯
+고대 이집트 무덤에서 나온 꿀단지, 왜 안 썩었을까? 수분이 적고 산성이라 세균이 못 사는 꿀의 과학.
+꿀벌 한 마리가 평생 모으는 꿀은 겨우 티스푼 1/12!
 ※ 돌 전 아기에게는 꿀을 먹이면 안 됩니다.
 """
 TAGS = ["꿀", "꿀유통기한", "꿀벌", "이집트", "음식과학", "식재료", "잡학", "쇼츠", "shorts"]
+QUESTION = '집에 있는 꿀, 유통기한 확인해 본 적 있음?'
+HASHTAGS = ['꿀', '꿀유통기한', '꿀벌', '음식과학']
 THUMB_CUE = (1, "0.2")
 
 STYLE = "photorealistic, cinematic lighting, documentary photo, square composition, no text, no watermark"

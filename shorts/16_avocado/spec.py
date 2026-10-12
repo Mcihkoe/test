@@ -8,10 +8,13 @@ ACCENT = "#76ff03"
 TITLE = ["아보카도 씨가", "쓸데없이 큰 이유"]
 YT_TITLE = "아보카도 씨가 이렇게 큰 이유 ㄷㄷ"
 DESCRIPTION = """
-아보카도 씨, 왜 이렇게 클까? 🥑
-통째로 삼켜서 씨를 퍼뜨려 주던 거대 동물들이 멸종해버렸다는 가설!
+아보카도 씨가 쓸데없이 큰 이유 🥑
+옛날엔 아보카도를 통째로 삼켜 씨를 퍼뜨려 주던 거대 동물들이 있었다?
+거대 땅늘보가 멸종하고 짝꿍을 잃어버린 아보카도 이야기 (유력한 가설).
 """
 TAGS = ["아보카도", "아보카도씨", "거대땅늘보", "멸종", "음식상식", "식재료", "잡학", "쇼츠", "shorts"]
+QUESTION = '아보카도, 맛있다 vs 무슨 맛인지 모르겠다?'
+HASHTAGS = ['아보카도', '아보카도씨', '거대땅늘보', '음식상식']
 THUMB_CUE = (3, "0.1")
 
 STYLE = "3D animated cartoon style like a Pixar film, vibrant colors, square composition, no text, no watermark"
