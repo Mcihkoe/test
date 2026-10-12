@@ -59,10 +59,12 @@ def build_ass(spec, total, path):
     ]
     t1, t2 = spec["title"]
     end = ass_time(total)
-    lines.append(f"Dialogue: 2,0:00:00.00,{end},Title,,0,0,90,,{t1}")
-    lines.append(f"Dialogue: 2,0:00:00.00,{end},Title,,0,0,200,,{{\\c{COLORS[accent]}}}{t2}")
+    # 긴 제목은 화면 폭(양옆 40px 여백)에 맞게 글자 크기를 줄임
+    fs = min(96, int(1000 / (max(len(t1), len(t2)) * 0.95)))
+    lines.append(f"Dialogue: 2,0:00:00.00,{end},Title,,0,0,90,,{{\\fs{fs}}}{t1}")
+    lines.append(f"Dialogue: 2,0:00:00.00,{end},Title,,0,0,{90 + int(fs * 1.15)},,{{\\fs{fs}\\c{COLORS[accent]}}}{t2}")
     for s in spec.get("subs", []):
-        lines.append(f"Dialogue: 3,{ass_time(s['start'])},{ass_time(s['end'])},Sub,,0,0,330,,"
+        lines.append(f"Dialogue: 3,{ass_time(s['start'])},{ass_time(s['end'])},Sub,,0,0,{spec.get('sub_margin', 330)},,"
                      f"{{\\fad(60,0)}}{ass_text(s['text'], accent)}")
     if spec.get("credit"):
         lines.append(f"Dialogue: 2,0:00:00.00,{end},Credit,,0,0,0,,원본 영상: {spec['credit']} / YouTube")
