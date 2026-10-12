@@ -1,5 +1,7 @@
 # 쇼츠 레퍼런스 후보 (A단계)
 
+**확정(1차): A1 · F1 · U2 · S1 + ASMR 1편 (아래 5번에서 선택)**
+
 조사일: 2026-10-12 · 조회수는 YouTube 검색(조회수순, 4분 미만) 결과 기준
 
 ## 1. 동물 실사
@@ -30,3 +32,11 @@
 |---|---|---|---|---|---|
 | S1 | 반도체가 양자의 영역으로 들어가 생긴 기묘한 현상 (세모과학) | 810만 | https://youtube.com/shorts/3CXxbtYihX0 | 양자 터널링 때문에 전자가 새는 문제 | 반도체 쇼츠 중 조회수 최고, 한국어 구성을 그대로 따라 하기 좋음 |
 | S2 | 반도체란 무엇일까 (일당백) | 830만 | https://youtube.com/shorts/kbWJfqYP6_8 | 반도체 개념을 42초에 설명 | 입문형 소재, 실제 공장·장비 영상과 섞기 좋음 |
+
+## 5. ASMR (추가)
+나레이션을 최소로 줄이고 원본 소리를 주인공으로 쓰는 형식("소리 켜고 들어 보세요"). 효과가 확인된 방식과 같음.
+| # | 제목 | 조회수 | 링크 | 한 줄 요약 | 추천 이유 |
+|---|---|---|---|---|---|
+| R1 | Kinetic Sand Art! You'll Be Hypnotized Watching This. (TixSand) | 3억 2,527만 | https://youtube.com/shorts/t6p-AKBOSxE | 키네틱 샌드를 자르고 눌러서 작품을 만듦 (26초) | 개인 크리에이터, 자르는 소리와 장면이 매우 분명함 |
+| R2 | Satisfying Miniature: Toy Cooking Corn Soup ASMR (예리몽) | 3억 1,210만 | https://youtube.com/shorts/osprbGMyjZk | 미니어처 주방에서 진짜로 옥수수 수프를 요리함 (26초) | 한국 크리에이터, "진짜로 된다고?" 하는 반전 포인트 |
+| R3 | asmr ICE (MILK CHIASEED COCA COLA COLOR) eating sounds (closer food) | 1억 822만 | https://youtube.com/shorts/p0QTfklQmCg | 색깔 얼음을 깨물어 먹는 소리 (61초) | 먹는 ASMR 중 조회수 최상위. 단, 나레이션을 붙일 사실이 적음 |
