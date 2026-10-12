@@ -1,0 +1,7 @@
+{"title":["주인에게 일부러 하는","고양이의 귀여운 행동"],"accent":"sky",
+ "credit":"@TestChannel",
+ "scenes":[{"src":"src.mp4","src_start":0,"dur":4},{"src":"src.mp4","src_start":4,"dur":4,"speed":0.8}],
+ "subs":[{"start":0,"end":2,"text":"고양이가 [일부러] 하는"},{"start":2,"end":4.5,"text":"행동이 있는데요"},{"start":4.5,"end":8,"text":"[시속 9km]라고 합니다.."}],
+ "circles":[{"start":0,"end":1.5,"x":540,"y":560,"r":150}],
+ "shakes":[{"start":5,"dur":0.4}],
+ "audio":"a.wav"}
