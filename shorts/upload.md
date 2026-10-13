@@ -96,9 +96,6 @@ https://www.youtube.com/shorts/tz8hooclBRI
 전자는 파동처럼 움직여서 벽 너머에 나타날 확률이 생기기 때문인데,
 이 때문에 스위치를 꺼도 전기가 새어 나가는 문제가 생깁니다.
 
-📹 영상 출처: 세모과학 (YouTube @세모과학)
-https://www.youtube.com/shorts/3CXxbtYihX0
-
 🎵 Music: "Volatile Reaction" Kevin MacLeod (incompetech.com)
 Licensed under Creative Commons: By Attribution 4.0 License
 http://creativecommons.org/licenses/by/4.0/
