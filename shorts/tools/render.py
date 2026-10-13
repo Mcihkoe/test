@@ -5,7 +5,7 @@ spec.json 하나로 1080x1920 세로 영상을 만든다.
 - 위: 큰 제목 두 줄(흰색 + 빨강 또는 하늘색) 고정
 - 가운데: 장면 클립(장면마다 천천히 확대)
 - 아래: 말하는 구절 자막, [대괄호] 안 단어는 강조색
-- 맨 아래: 작은 회색 원본 출처
+- 맨 아래: 채널명
 - 빨간 원(circles), 화면 흔들림(shakes)
 
 사용법: python3 render.py spec.json out.mp4
@@ -52,7 +52,7 @@ def build_ass(spec, total, path):
         "Alignment, MarginL, MarginR, MarginV, Encoding",
         f"Style: Title,{FONT},96,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,6,0,8,40,40,0,1",
         f"Style: Sub,{FONT},78,&H00FFFFFF,&H00FFFFFF,&H00000000,&H64000000,0,0,0,0,100,100,0,0,1,7,2,2,60,60,0,1",
-        f"Style: Credit,{FONT},34,&H00A0A0A0,&H00A0A0A0,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,2,40,40,40,1",
+        f"Style: Credit,{FONT},40,&H00C8C8C8,&H00A0A0A0,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,2,40,40,40,1",
         f"Style: Circle,{FONT},20,&H00000000,&H00000000,{COLORS['red'][:-1]},&H00000000,0,0,0,0,100,100,0,0,1,12,0,7,0,0,0,1",
         "", "[Events]",
         "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
@@ -66,8 +66,8 @@ def build_ass(spec, total, path):
     for s in spec.get("subs", []):
         lines.append(f"Dialogue: 3,{ass_time(s['start'])},{ass_time(s['end'])},Sub,,0,0,{spec.get('sub_margin', 330)},,"
                      f"{{\\fad(60,0)}}{ass_text(s['text'], accent)}")
-    if spec.get("credit"):
-        lines.append(f"Dialogue: 2,0:00:00.00,{end},Credit,,0,0,0,,원본 영상: {spec['credit']} / YouTube")
+    if spec.get("brand"):  # 맨 아래 채널명
+        lines.append(f"Dialogue: 2,0:00:00.00,{end},Credit,,0,0,0,,{spec['brand']}")
     for c in spec.get("circles", []):
         x, y, r = c["x"], VIDEO_Y + c["y"], c["r"]
         lines.append(f"Dialogue: 4,{ass_time(c['start'])},{ass_time(c['end'])},Circle,,0,0,0,,"

@@ -5,7 +5,7 @@
 
 spec.json
 {
-  "title": ["윗줄", "아랫줄"], "accent": "sky|red|yellow", "credit": "채널명",
+  "title": ["윗줄", "아랫줄"], "accent": "sky|red|yellow", "brand": "이게 된다고?",  # 맨 아래 채널명(기본값)
   "src": "../raw/ref/xxx.mp4",          # 기본 원본
   "crop": "w:h:x:y",                    # 원본에서 먼저 잘라 낼 영역(선택)
   "cover": [[y0, y1], ...],             # 원본 자막 띠를 흐리게(원본 픽셀, 선택)
@@ -246,7 +246,7 @@ def main(ep_dir):
     circles = [dict(sc["circle"], start=a, end=a + min(d, sc["circle"].get("for", 1.5)))
                for sc, a, d in timeline if sc.get("circle")]
     shakes = [{"start": a + sc["shake"], "dur": 0.4} for sc, a, d in timeline if "shake" in sc]
-    rspec = {"title": spec["title"], "accent": spec.get("accent", "red"), "credit": spec.get("credit"),
+    rspec = {"title": spec["title"], "accent": spec.get("accent", "red"), "brand": spec.get("brand", "이게 된다고?"),
              "subs": subs, "circles": circles, "shakes": shakes, "sub_margin": spec.get("sub_margin", 330)}
     ass = os.path.join(work, "subs.ass")
     render.build_ass(rspec, total, ass)
