@@ -1,0 +1,8 @@
+raw/
+renders/
+*.mp4
+*.wav
+cookies*.txt
+bgm/*.mp3
+work/
+__pycache__/
