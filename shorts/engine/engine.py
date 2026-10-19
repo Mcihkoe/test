@@ -403,7 +403,9 @@ def write_upload(short_dir, spec, total):
     desc = spec.DESCRIPTION.strip()
     if getattr(spec, "QUESTION", None):
         desc += f"\n\n💬 {spec.QUESTION}"
-    desc += "\n\n" + SERIES_LINE.format(series=spec.SERIES)
+    if getattr(spec, "NEXT", None):
+        desc += f"\n\n▶ 다음 편 예고: {spec.NEXT}"
+    desc += "\n\n" + getattr(spec, "SUBSCRIBE", SERIES_LINE).format(series=spec.SERIES)
     hashtags = list(getattr(spec, "HASHTAGS", spec.TAGS[:4])) + ["shorts"]
     with open(os.path.join(short_dir, "upload.txt"), "w") as f:
         f.write(f"[제목]\n{spec.YT_TITLE}\n\n[설명]\n{desc}\n\n{' '.join('#' + x for x in hashtags)}\n\n"
