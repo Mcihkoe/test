@@ -13,6 +13,8 @@ import numpy as np
 
 ENGINE = os.path.dirname(os.path.abspath(__file__))
 SR, FPS, W, H = 44100, 30, 1080, 1920
+# Mobile safe zone: the Shorts app overlays ~200px at the top and the caption/channel block
+# from ~1500px down, so the title starts at 230px and the stage spans 480-1560px.
 TEMPO = 1.28  # speed-up applied to the TTS voice (pitch preserved)
 FFMPEG = __import__("imageio_ffmpeg").get_ffmpeg_exe()
 FONTS = os.path.join(ENGINE, "fonts")
@@ -170,16 +172,16 @@ CSS = """
 @font-face{font-family:NSK;src:url('file://%(fonts)s/NotoSansKR.ttf');font-weight:900}
 *{margin:0;padding:0;box-sizing:border-box}
 body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family:NSK,'Noto Color Emoji',sans-serif}
-.title{position:absolute;left:0;top:70px;width:100%;text-align:center;font-family:BHS,'Noto Color Emoji';font-size:112px;line-height:1.16;letter-spacing:-1px}
+.title{position:absolute;left:0;top:230px;width:100%;text-align:center;font-family:BHS,'Noto Color Emoji';font-size:100px;line-height:1.12;letter-spacing:-1px}
 .title .l1{color:#fff}.title .l2{color:%(accent)s}
-.stage{position:absolute;left:0;top:420px;width:1080px;height:1080px;overflow:hidden}
+.stage{position:absolute;left:0;top:480px;width:1080px;height:1080px;overflow:hidden}
 .scene{position:absolute;inset:0;opacity:0}.scin,.bg{position:absolute;inset:0}
 .x{position:absolute;line-height:1;white-space:nowrap}
 .e{font-family:'Noto Color Emoji'}
-.sub{position:absolute;left:50%;top:1330px;transform:translateX(-50%);background:#000;color:#fff;font-weight:900;font-size:62px;padding:10px 34px 16px;border-radius:14px;white-space:nowrap;letter-spacing:-1px}
+.sub{position:absolute;left:50%;top:1360px;transform:translateX(-50%);background:#000;color:#fff;font-weight:900;font-size:62px;padding:10px 34px 16px;border-radius:14px;white-space:nowrap;letter-spacing:-1px}
 .sub.em{color:#ffe600;font-size:80px}
 .progress{position:absolute;left:0;top:1500px;height:10px;background:%(accent)s}
-.series{position:absolute;left:0;top:1560px;width:100%;text-align:center;color:#888;font-weight:900;font-size:40px;letter-spacing:2px}
+.series{position:absolute;left:0;top:1590px;width:100%;text-align:center;color:#888;font-weight:900;font-size:40px;letter-spacing:2px}
 .comic{font-family:BHS;color:#ffe600;-webkit-text-stroke:10px #000;paint-order:stroke fill}
 .big{font-family:BHS;-webkit-text-stroke:12px #fff;paint-order:stroke fill;color:#ff2020}
 .card{background:#fff;color:#111;border-radius:28px;text-align:center;font-family:BHS;padding:18px 40px 22px;box-shadow:0 12px 0 rgba(0,0,0,.25)}

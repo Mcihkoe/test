@@ -303,14 +303,14 @@ html = f"""<!doctype html><html><head><meta charset="utf-8"><style>
 @font-face{{font-family:NSK;src:url('file://{fonts}/NotoSansKR.ttf');font-weight:900}}
 *{{margin:0;padding:0;box-sizing:border-box}}
 body{{width:{W}px;height:{H}px;background:#000;overflow:hidden;font-family:NSK,'Noto Color Emoji',sans-serif}}
-.title{{position:absolute;left:0;top:70px;width:100%;text-align:center;font-family:BHS,'Noto Color Emoji';font-size:112px;line-height:1.16;letter-spacing:-1px}}
+.title{{position:absolute;left:0;top:230px;width:100%;text-align:center;font-family:BHS,'Noto Color Emoji';font-size:100px;line-height:1.12;letter-spacing:-1px}}
 .title .l1{{color:#fff}} .title .l2{{color:#ff2020}}
-.stage{{position:absolute;left:0;top:420px;width:1080px;height:1080px;overflow:hidden}}
+.stage{{position:absolute;left:0;top:480px;width:1080px;height:1080px;overflow:hidden}}
 .scene{{position:absolute;inset:0;opacity:0}}
 .scin,.cam,.shakewrap{{position:absolute;inset:0}}
 .bg{{position:absolute;inset:0}}
 .e{{position:absolute;font-family:'Noto Color Emoji';line-height:1}}
-.sub{{position:absolute;left:50%;top:1330px;transform:translateX(-50%);background:#000;color:#fff;font-weight:900;font-size:62px;padding:10px 34px 16px;border-radius:14px;white-space:nowrap;letter-spacing:-1px}}
+.sub{{position:absolute;left:50%;top:1360px;transform:translateX(-50%);background:#000;color:#fff;font-weight:900;font-size:62px;padding:10px 34px 16px;border-radius:14px;white-space:nowrap;letter-spacing:-1px}}
 .sub.em{{color:#ffe600;font-size:84px}}
 .progress{{position:absolute;left:0;top:1500px;height:10px;background:#ff2020}}
 .bedframe{{position:absolute;left:130px;top:640px;width:820px;height:230px;background:#6d4c41;border-radius:20px}}
