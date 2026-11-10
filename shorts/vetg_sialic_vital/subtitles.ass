@@ -1,0 +1,21 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1920
+PlayResY: 1080
+WrapStyle: 2
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+; 감성 자막: 흰 글자 + 은은한 그림자 (하단 중앙)
+Style: Copy,Pretendard SemiBold,58,&H00FFFFFF,&H00FFFFFF,&H00000000,&H64000000,0,0,0,0,100,100,1,0,1,0,2,2,80,80,96,1
+; 제품 자막: 크림 배경 박스 + 브랜드 컬러 #2e516e (ASS 색상은 &HBBGGRR)
+Style: Product,Pretendard SemiBold,50,&H006E512E,&H006E512E,&H00F5F8FC,&H00F5F8FC,0,0,0,0,100,100,1,0,3,18,0,2,80,80,96,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.40,0:00:02.90,Copy,,0,0,0,,{\fad(250,200)}조금 느려진 걸음이, 마음에 걸릴 때.
+Dialogue: 0,0:00:03.30,0:00:05.90,Copy,,0,0,0,,{\fad(250,200)}함께할 내일을 위해.
+Dialogue: 0,0:00:06.40,0:00:09.80,Product,,0,0,0,,{\fad(200,200)}Muscle Care · 근육 건강 케어
+Dialogue: 0,0:00:10.30,0:00:13.80,Product,,0,0,0,,{\fad(200,200)}Joint Care · 관절 건강 케어
+Dialogue: 0,0:00:14.30,0:00:17.80,Product,,0,0,0,,{\fad(200,200)}Mind Care · 인지 건강 케어
+Dialogue: 0,0:00:18.30,0:00:20.80,Copy,,0,0,0,,{\fad(250,250)}매일의 작은 돌봄으로.

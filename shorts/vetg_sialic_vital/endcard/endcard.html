@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:P;src:url(../fonts/Pretendard-Regular.ttf);font-weight:400}
+@font-face{font-family:P;src:url(../fonts/Pretendard-Medium.ttf);font-weight:500}
+@font-face{font-family:P;src:url(../fonts/Pretendard-SemiBold.ttf);font-weight:600}
+@font-face{font-family:P;src:url(../fonts/Pretendard-Bold.ttf);font-weight:700}
+:root{--brand:#2e516e;--bg:#fcf8f5}
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;font-family:P,sans-serif}
+body{background:transparent}
+body.full{background:var(--bg)}
+/* soft cream wash on the left so copy reads over live footage */
+.wash{position:absolute;inset:0;background:linear-gradient(90deg,rgba(252,248,245,.94) 0%,rgba(252,248,245,.80) 34%,rgba(252,248,245,0) 58%)}
+.copy{position:absolute;left:150px;top:250px;color:var(--brand)}
+.copy img{height:96px;display:block}
+.name{margin-top:34px;font-weight:600;font-size:40px;letter-spacing:.18em}
+.main{margin-top:64px;font-weight:700;font-size:76px;letter-spacing:-.01em;line-height:1.2}
+.rule{width:64px;height:3px;background:var(--brand);margin-top:44px;opacity:.6}
+.lines{margin-top:28px;font-weight:500;font-size:28px;color:#4a6378;letter-spacing:.02em}
+.products{position:absolute;right:110px;bottom:90px;display:flex;gap:0;align-items:flex-end;padding:18px 26px 10px;border-radius:28px}
+body.overlay .products{background:var(--bg);box-shadow:0 20px 50px rgba(46,81,110,.16)}
+.products img{height:330px;display:block}
+.foot{position:absolute;left:150px;bottom:60px;font-size:20px;color:#7a8a97;font-weight:500}
+</style></head>
+<body class="__MODE__">
+<div class="wash"></div>
+<div class="copy">
+  <img src="../assets/vetg_logo_brand.png" alt="VetG">
+  <div class="name">SIALIC VITAL</div>
+  <div class="main">사계절 내내,<br>우리 곁에.</div>
+  <div class="rule"></div>
+  <div class="lines">근육 · 관절 · 인지 건강 케어</div>
+</div>
+<div class="products">
+  <img src="../assets/muscle_care.png" alt="Muscle Care">
+  <img src="../assets/joint_care.png" alt="Joint Care">
+  <img src="../assets/mind_care.png" alt="Mind Care">
+</div>
+<div class="foot">동물병원 전용 보조사료</div>
+</body></html>
