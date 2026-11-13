@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #1F3A5F; --navy-dark: #162B47; --accent: #2F6FED; --accent-soft: #EEF3FB;
+      --text: #1F2937; --muted: #6B7280; --line: #E3E8F0; --bg: #F7F9FC;
+      --ok: #12805C; --err: #C2410C; --guide: #FFFBEF; --guide-line: #F2D17A;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Noto Sans KR', sans-serif; color: var(--text); background: var(--bg); font-size: 13px; }
+
+    .hero { background: linear-gradient(135deg, var(--navy), var(--navy-dark)); color: #fff; padding: 18px 16px 16px; }
+    .hero .label { font-size: 11px; color: #C9D6EA; letter-spacing: .02em; }
+    .hero .no { font-size: 28px; font-weight: 700; letter-spacing: .04em; margin: 4px 0 6px; font-variant-numeric: tabular-nums; }
+    .hero .meta { display: flex; gap: 6px; flex-wrap: wrap; }
+    .pill { background: rgba(255,255,255,.14); border-radius: 999px; padding: 3px 9px; font-size: 11px; }
+
+    .wrap { padding: 14px 14px 20px; }
+    .card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+
+    .field { margin-bottom: 13px; }
+    .field:last-child { margin-bottom: 0; }
+    label { display: block; font-weight: 500; font-size: 12px; margin-bottom: 6px; }
+    label .req { color: var(--accent); margin-left: 2px; }
+    label .hint { color: var(--muted); font-weight: 400; font-size: 11px; margin-left: 4px; }
+    input, textarea {
+      width: 100%; border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px;
+      font: inherit; color: var(--text); background: #fff; outline: none; transition: border-color .15s, box-shadow .15s;
+    }
+    textarea { resize: vertical; min-height: 60px; }
+    input:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(47,111,237,.15); }
+    input[readonly] { background: var(--bg); color: var(--muted); }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 7px; }
+    .chip {
+      border: 1px solid var(--line); background: #fff; color: var(--text); border-radius: 999px;
+      padding: 4px 10px; font: inherit; font-size: 11.5px; cursor: pointer; transition: all .12s;
+    }
+    .chip:hover { border-color: var(--accent); color: var(--accent); }
+    .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+    button.primary {
+      width: 100%; border: 0; border-radius: 8px; padding: 11px; font: inherit; font-weight: 700; font-size: 14px;
+      background: var(--accent); color: #fff; cursor: pointer; transition: background .15s;
+    }
+    button.primary:hover { background: #2559C9; }
+    button.primary:disabled { background: #9DB6EE; cursor: default; }
+
+    .msg { display: none; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; font-size: 12px; line-height: 1.5; }
+    .msg.ok { display: block; background: #E8F6F0; border: 1px solid #BFE6D4; color: var(--ok); }
+    .msg.err { display: block; background: #FFF1EA; border: 1px solid #F7CDB8; color: var(--err); }
+    .msg b { font-size: 15px; letter-spacing: .03em; }
+    .copy { margin-left: 6px; border: 1px solid #BFE6D4; background: #fff; color: var(--ok); border-radius: 6px; font: inherit; font-size: 11px; padding: 2px 8px; cursor: pointer; }
+
+    .section-title { font-size: 12px; font-weight: 700; color: var(--navy); margin: 4px 2px 8px; }
+    .recent { list-style: none; margin: 0; padding: 0; }
+    .recent li { display: grid; grid-template-columns: 78px 1fr; gap: 6px; padding: 7px 0; border-bottom: 1px dashed var(--line); }
+    .recent li:last-child { border-bottom: 0; }
+    .recent .d { font-weight: 700; color: var(--navy); font-size: 12px; }
+    .recent .t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .recent .s { color: var(--muted); font-size: 11px; }
+    .empty { color: var(--muted); font-size: 12px; text-align: center; padding: 6px 0; }
+
+    details.guide { background: var(--guide); border: 1px solid var(--guide-line); border-radius: 10px; padding: 10px 12px; font-size: 12px; line-height: 1.65; }
+    details.guide summary { font-weight: 700; cursor: pointer; color: var(--navy-dark); }
+    .fmt { display: flex; gap: 4px; margin: 8px 0; }
+    .fmt span { flex: 1; text-align: center; border-radius: 6px; padding: 6px 0; font-weight: 700; }
+    .fmt small { display: block; font-weight: 400; font-size: 10px; color: var(--muted); }
+    .f1 { background: #E4EBF5; color: var(--navy); } .f2 { background: #DCE7FF; color: var(--accent); } .f3 { background: #FCEFC7; color: #8A5A00; }
+    .warn { color: #B4541A; }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <div class="label">이번에 발급될 문서번호</div>
+    <div class="no" id="nextNo">GC······</div>
+    <div class="meta">
+      <span class="pill" id="todayPill">작성일자 —</span>
+      <span class="pill" id="countPill">이번 달 0건 발행</span>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div id="msg" class="msg"></div>
+
+    <form id="f" class="card" autocomplete="off">
+      <div class="row2 field">
+        <div>
+          <label>문서번호 <span class="hint">자동</span></label>
+          <input id="docPreview" readonly>
+        </div>
+        <div>
+          <label>작성일자 <span class="hint">자동</span></label>
+          <input id="datePreview" readonly>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>작성부서<span class="req">*</span><span class="hint">선택 또는 직접 입력</span></label>
+        <div class="chips" id="deptChips"></div>
+        <input id="dept" name="dept" list="deptList" placeholder="부서명을 선택하거나 입력하세요">
+        <datalist id="deptList"></datalist>
+      </div>
+
+      <div class="field">
+        <label>작성자<span class="req">*</span><span class="hint">선택 또는 직접 입력</span></label>
+        <div class="chips" id="authorChips"></div>
+        <input id="author" name="author" list="authorList" placeholder="작성자를 선택하거나 입력하세요">
+        <datalist id="authorList"></datalist>
+      </div>
+
+      <div class="field">
+        <label for="to">공문 수신처<span class="req">*</span></label>
+        <input id="to" name="to" placeholder="예) ○○주식회사 대표이사">
+      </div>
+
+      <div class="field">
+        <label for="title">공문 제목<span class="req">*</span></label>
+        <textarea id="title" name="title" placeholder="공문 제목을 입력하세요"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="note">비고</label>
+        <input id="note" name="note" placeholder="선택 입력">
+      </div>
+
+      <button type="submit" class="primary" id="submitBtn">공문 등록하기</button>
+    </form>
+
+    <div class="card">
+      <div class="section-title">🕘 최근 등록</div>
+      <ul class="recent" id="recent"><li class="empty">불러오는 중…</li></ul>
+    </div>
+
+    <details class="guide">
+      <summary>📌 문서번호 작성 요령</summary>
+      <div class="fmt">
+        <span class="f1">GC<small>고정</small></span>
+        <span class="f2">YYMM<small>연·월</small></span>
+        <span class="f3">01<small>월별 순번</small></span>
+      </div>
+      • <b>GC</b> : 고정 접두어<br>
+      • <b>YYMM</b> : 작성일 기준 연도 2자리 + 월 2자리<br>
+      • <b>순번</b> : 매월 01부터 다시 시작<br>
+      예) 2026년 10월 1번째 → <b>GC261001</b><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2026년 10월 2번째 → <b>GC261002</b><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2026년 11월 1번째 → <b>GC261101</b><br>
+      <span class="warn">⚠️ 문서번호·작성일자는 직접 수정하지 마세요.<br>
+      ⚠️ 취소 공문은 행 삭제 대신 비고에 '취소'로 표기하세요.</span>
+    </details>
+  </div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  function renderChips(boxId, inputId, listId, items) {
+    const box = $(boxId), input = $(inputId);
+    box.innerHTML = items.map(v => `<button type="button" class="chip" data-v="${esc(v)}">${esc(v)}</button>`).join('');
+    $(listId).innerHTML = items.map(v => `<option value="${esc(v)}">`).join('');
+    const sync = () => box.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.v === input.value.trim()));
+    box.onclick = e => {
+      const c = e.target.closest('.chip'); if (!c) return;
+      input.value = c.classList.contains('on') ? '' : c.dataset.v;
+      sync();
+    };
+    input.oninput = sync;
+    sync();
+  }
+
+  function render(d) {
+    $('nextNo').textContent = d.nextNo;
+    $('docPreview').value = d.nextNo;
+    $('datePreview').value = d.today;
+    $('todayPill').textContent = '작성일자 ' + d.today;
+    $('countPill').textContent = '이번 달 ' + d.monthCount + '건 발행';
+    renderChips('deptChips', 'dept', 'deptList', d.depts);
+    renderChips('authorChips', 'author', 'authorList', d.authors);
+    $('recent').innerHTML = d.recent.length
+      ? d.recent.map(r => `<li><div><div class="d">${esc(r.docNo)}</div><div class="s">${esc(r.date)}</div></div>
+           <div><div class="t">${esc(r.title)}</div><div class="s">${esc(r.dept)}</div></div></li>`).join('')
+      : '<li class="empty">아직 등록된 공문이 없습니다.</li>';
+  }
+
+  function load() {
+    google.script.run.withSuccessHandler(render)
+      .withFailureHandler(e => showMsg('err', '데이터를 불러오지 못했습니다: ' + esc(e.message)))
+      .getSidebarData();
+  }
+
+  function showMsg(type, html) {
+    const m = $('msg'); m.className = 'msg ' + type; m.innerHTML = html;
+  }
+
+  function copyText(t) {
+    const done = () => showMsg('ok', `✅ <b>${esc(t)}</b> 복사되었습니다.`);
+    if (navigator.clipboard) navigator.clipboard.writeText(t).then(done, fallback); else fallback();
+    function fallback() {
+      const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy'); ta.remove(); done();
+    }
+  }
+
+  $('f').addEventListener('submit', e => {
+    e.preventDefault();
+    const form = { dept: $('dept').value, author: $('author').value, to: $('to').value, title: $('title').value, note: $('note').value };
+    const btn = $('submitBtn');
+    btn.disabled = true; btn.textContent = '등록 중…';
+    google.script.run
+      .withSuccessHandler(res => {
+        showMsg('ok', `✅ 등록 완료 &nbsp;<b>${esc(res.docNo)}</b>
+          <button type="button" class="copy" onclick="copyText('${esc(res.docNo)}')">번호 복사</button><br>
+          <span style="color:#4B5563">작성일자 ${esc(res.date)} · ${res.row}행에 기록되었습니다.</span>`);
+        ['to', 'title', 'note'].forEach(id => $(id).value = '');
+        btn.disabled = false; btn.textContent = '공문 등록하기';
+        load();
+      })
+      .withFailureHandler(err => {
+        showMsg('err', '⚠️ ' + esc(err.message));
+        btn.disabled = false; btn.textContent = '공문 등록하기';
+      })
+      .registerDocument(form);
+  });
+
+  load();
+</script>
+</body>
+</html>
