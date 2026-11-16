@@ -48,8 +48,10 @@ function onOpen() {
 }
 
 function showSidebar() {
-  const html = HtmlService.createHtmlOutputFromFile('Sidebar').setTitle('공문 등록');
-  SpreadsheetApp.getUi().showSidebar(html);
+  const t = HtmlService.createTemplateFromFile('Sidebar');
+  // 목록·다음 문서번호·오늘 날짜를 창을 열 때 바로 넣어 줌
+  t.boot = JSON.stringify(getSidebarData()).replace(/</g, '\\u003c');
+  SpreadsheetApp.getUi().showSidebar(t.evaluate().setTitle('공문 등록'));
 }
 
 function openListSheet() {

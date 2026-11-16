@@ -27,23 +27,23 @@
     label { display: block; font-weight: 500; font-size: 12px; margin-bottom: 6px; }
     label .req { color: var(--accent); margin-left: 2px; }
     label .hint { color: var(--muted); font-weight: 400; font-size: 11px; margin-left: 4px; }
-    input, textarea {
+    input, textarea, select {
       width: 100%; border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px;
       font: inherit; color: var(--text); background: #fff; outline: none; transition: border-color .15s, box-shadow .15s;
     }
-    textarea { resize: vertical; min-height: 60px; }
-    input:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(47,111,237,.15); }
-    input[readonly] { background: var(--bg); color: var(--muted); }
-
-    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 7px; }
-    .chip {
-      border: 1px solid var(--line); background: #fff; color: var(--text); border-radius: 999px;
-      padding: 4px 10px; font: inherit; font-size: 11.5px; cursor: pointer; transition: all .12s;
+    select {
+      appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 30px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%236B7280' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
     }
-    .chip:hover { border-color: var(--accent); color: var(--accent); }
-    .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+    select.placeholder { color: #9CA3AF; }
+    textarea { resize: vertical; min-height: 60px; }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(47,111,237,.15); }
+    input[readonly] { background: var(--accent-soft); color: var(--navy); font-weight: 700; letter-spacing: .02em; }
+    .custom { margin-top: 6px; }
 
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .auto-note { font-size: 11px; color: var(--muted); margin-top: -6px; margin-bottom: 13px; }
 
     button.primary {
       width: 100%; border: 0; border-radius: 8px; padding: 11px; font: inherit; font-weight: 700; font-size: 14px;
@@ -92,42 +92,41 @@
     <form id="f" class="card" autocomplete="off">
       <div class="row2 field">
         <div>
-          <label>문서번호 <span class="hint">자동</span></label>
+          <label for="docPreview">문서번호 <span class="hint">자동</span></label>
           <input id="docPreview" readonly>
         </div>
         <div>
-          <label>작성일자 <span class="hint">자동</span></label>
+          <label for="datePreview">작성일자 <span class="hint">자동</span></label>
           <input id="datePreview" readonly>
         </div>
       </div>
+      <div class="auto-note">문서번호·작성일자는 [공문 등록하기]를 누른 시점 기준으로 자동 확정됩니다.</div>
 
       <div class="field">
-        <label>작성부서<span class="req">*</span><span class="hint">선택 또는 직접 입력</span></label>
-        <div class="chips" id="deptChips"></div>
-        <input id="dept" name="dept" list="deptList" placeholder="부서명을 선택하거나 입력하세요">
-        <datalist id="deptList"></datalist>
+        <label for="deptSel">작성부서<span class="req">*</span><span class="hint">목록 선택 또는 직접 입력</span></label>
+        <select id="deptSel"></select>
+        <input id="deptCustom" class="custom" placeholder="부서명을 직접 입력하세요" hidden>
       </div>
 
       <div class="field">
-        <label>작성자<span class="req">*</span><span class="hint">선택 또는 직접 입력</span></label>
-        <div class="chips" id="authorChips"></div>
-        <input id="author" name="author" list="authorList" placeholder="작성자를 선택하거나 입력하세요">
-        <datalist id="authorList"></datalist>
+        <label for="authorSel">작성자<span class="req">*</span><span class="hint">목록 선택 또는 직접 입력</span></label>
+        <select id="authorSel"></select>
+        <input id="authorCustom" class="custom" placeholder="이름을 직접 입력하세요" hidden>
       </div>
 
       <div class="field">
         <label for="to">공문 수신처<span class="req">*</span></label>
-        <input id="to" name="to" placeholder="예) ○○주식회사 대표이사">
+        <input id="to" placeholder="예) ○○주식회사 대표이사">
       </div>
 
       <div class="field">
         <label for="title">공문 제목<span class="req">*</span></label>
-        <textarea id="title" name="title" placeholder="공문 제목을 입력하세요"></textarea>
+        <textarea id="title" placeholder="공문 제목을 입력하세요"></textarea>
       </div>
 
       <div class="field">
         <label for="note">비고</label>
-        <input id="note" name="note" placeholder="선택 입력">
+        <input id="note" placeholder="선택 입력">
       </div>
 
       <button type="submit" class="primary" id="submitBtn">공문 등록하기</button>
@@ -157,41 +156,57 @@
   </div>
 
 <script>
+  // 사이드바를 열 때 서버에서 미리 넣어 준 데이터 (목록·다음 번호·오늘 날짜)
+  const BOOT = <?!= boot ?>;
+  const CUSTOM = '__custom__';
   const $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const store = {
+    get(k) { try { return localStorage.getItem('gongmun.' + k) || ''; } catch (e) { return ''; } },
+    set(k, v) { try { localStorage.setItem('gongmun.' + k, v); } catch (e) {} }
+  };
 
-  function renderChips(boxId, inputId, listId, items) {
-    const box = $(boxId), input = $(inputId);
-    box.innerHTML = items.map(v => `<button type="button" class="chip" data-v="${esc(v)}">${esc(v)}</button>`).join('');
-    $(listId).innerHTML = items.map(v => `<option value="${esc(v)}">`).join('');
-    const sync = () => box.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.v === input.value.trim()));
-    box.onclick = e => {
-      const c = e.target.closest('.chip'); if (!c) return;
-      input.value = c.classList.contains('on') ? '' : c.dataset.v;
-      sync();
+  /* ── 드롭다운 (목록 + 직접 입력) ── */
+  function setupCombo(key, items) {
+    const sel = $(key + 'Sel'), custom = $(key + 'Custom');
+    const current = comboValue(key) || store.get(key);
+    sel.innerHTML = '<option value="" disabled>선택하세요</option>' +
+      items.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join('') +
+      `<option value="${CUSTOM}">✏️ 직접 입력…</option>`;
+    if (current && items.includes(current)) { sel.value = current; custom.hidden = true; }
+    else if (current) { sel.value = CUSTOM; custom.hidden = false; custom.value = current; }
+    else { sel.value = ''; custom.hidden = true; }
+    sel.classList.toggle('placeholder', sel.value === '');
+    sel.onchange = () => {
+      sel.classList.toggle('placeholder', sel.value === '');
+      custom.hidden = sel.value !== CUSTOM;
+      if (!custom.hidden) { custom.value = ''; custom.focus(); }
     };
-    input.oninput = sync;
-    sync();
+  }
+  function comboValue(key) {
+    const sel = $(key + 'Sel'), custom = $(key + 'Custom');
+    if (!sel.value) return '';
+    return (sel.value === CUSTOM ? custom.value : sel.value).trim();
   }
 
+  /* ── 화면 그리기 ── */
   function render(d) {
     $('nextNo').textContent = d.nextNo;
     $('docPreview').value = d.nextNo;
     $('datePreview').value = d.today;
     $('todayPill').textContent = '작성일자 ' + d.today;
     $('countPill').textContent = '이번 달 ' + d.monthCount + '건 발행';
-    renderChips('deptChips', 'dept', 'deptList', d.depts);
-    renderChips('authorChips', 'author', 'authorList', d.authors);
+    setupCombo('dept', d.depts);
+    setupCombo('author', d.authors);
     $('recent').innerHTML = d.recent.length
       ? d.recent.map(r => `<li><div><div class="d">${esc(r.docNo)}</div><div class="s">${esc(r.date)}</div></div>
            <div><div class="t">${esc(r.title)}</div><div class="s">${esc(r.dept)}</div></div></li>`).join('')
       : '<li class="empty">아직 등록된 공문이 없습니다.</li>';
   }
 
-  function load() {
-    google.script.run.withSuccessHandler(render)
-      .withFailureHandler(e => showMsg('err', '데이터를 불러오지 못했습니다: ' + esc(e.message)))
-      .getSidebarData();
+  // 다음 문서번호·날짜를 최신으로 (다른 사람이 등록했거나 날짜가 바뀐 경우 대비)
+  function refresh() {
+    google.script.run.withSuccessHandler(render).withFailureHandler(() => {}).getSidebarData();
   }
 
   function showMsg(type, html) {
@@ -200,35 +215,44 @@
 
   function copyText(t) {
     const done = () => showMsg('ok', `✅ <b>${esc(t)}</b> 복사되었습니다.`);
-    if (navigator.clipboard) navigator.clipboard.writeText(t).then(done, fallback); else fallback();
-    function fallback() {
+    const fallback = () => {
       const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta);
-      ta.select(); document.execCommand('copy'); ta.remove(); done();
-    }
+      ta.select(); try { document.execCommand('copy'); } catch (e) {} ta.remove(); done();
+    };
+    try { navigator.clipboard.writeText(t).then(done, fallback); } catch (e) { fallback(); }
   }
 
+  /* ── 등록 ── */
   $('f').addEventListener('submit', e => {
     e.preventDefault();
-    const form = { dept: $('dept').value, author: $('author').value, to: $('to').value, title: $('title').value, note: $('note').value };
+    const form = { dept: comboValue('dept'), author: comboValue('author'),
+                   to: $('to').value, title: $('title').value, note: $('note').value };
     const btn = $('submitBtn');
     btn.disabled = true; btn.textContent = '등록 중…';
     google.script.run
       .withSuccessHandler(res => {
+        store.set('dept', form.dept); store.set('author', form.author);
         showMsg('ok', `✅ 등록 완료 &nbsp;<b>${esc(res.docNo)}</b>
-          <button type="button" class="copy" onclick="copyText('${esc(res.docNo)}')">번호 복사</button><br>
+          <button type="button" class="copy" data-doc="${esc(res.docNo)}">번호 복사</button><br>
           <span style="color:#4B5563">작성일자 ${esc(res.date)} · ${res.row}행에 기록되었습니다.</span>`);
         ['to', 'title', 'note'].forEach(id => $(id).value = '');
         btn.disabled = false; btn.textContent = '공문 등록하기';
-        load();
+        refresh();
       })
       .withFailureHandler(err => {
-        showMsg('err', '⚠️ ' + esc(err.message));
+        const m = String(err && err.message || err);
+        const auth = /인증|authoriz|권한/i.test(m);
+        showMsg('err', '⚠️ ' + esc(m) + (auth
+          ? '<br><span style="color:#4B5563">크롬에 구글 계정이 여러 개 로그인되어 있으면 생길 수 있습니다. 시크릿 창에서 이 시트를 공유받은 계정 하나로만 로그인해 다시 시도해 주세요.</span>'
+          : ''));
         btn.disabled = false; btn.textContent = '공문 등록하기';
       })
       .registerDocument(form);
   });
+  $('msg').addEventListener('click', e => { const b = e.target.closest('.copy'); if (b) copyText(b.dataset.doc); });
 
-  load();
+  render(BOOT);
+  setInterval(refresh, 60000);
 </script>
 </body>
 </html>
